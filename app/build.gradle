@@ -1,0 +1,124 @@
+apply plugin: 'io.github.rockerhieu.versionberg'
+apply plugin: 'com.android.application'
+apply plugin: 'com.getkeepsafe.dexcount'
+
+versionberg {
+    major 0
+    minor 1
+    nameTemplate '${major}.${minor}.${commitCount}.${commitSha}'
+    codeTemplate '(((${major} * 100) + ${minor}) * 100) * 100000 + ${build}'
+}
+
+android {
+    android {
+        compileSdkVersion 25
+        buildToolsVersion "25.0.2"
+
+        defaultConfig {
+            applicationId "xyz.santeri.pbap"
+
+            minSdkVersion 21
+            targetSdkVersion 25
+
+            versionCode versionberg.code
+            versionName versionberg.name
+
+            javaCompileOptions {
+                annotationProcessorOptions {
+                    includeCompileClasspath false
+                }
+            }
+        }
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+        }
+
+        lintOptions {
+            abortOnError false
+            textReport true
+            textOutput "stdout"
+            checkAllWarnings true
+            showAll true
+            explainIssues true
+        }
+    }
+}
+
+dependencies {
+    dependencies {
+        def supportVersion = '25.4.0'
+        def daggerVersion = '2.9'
+        def thirtyinchVersion = '0.8.0-rc3'
+        def butterknifeVersion = '8.5.1'
+        def rxBindingVersion = '1.0.0'
+        def leakcanaryVersion = '1.5'
+        def retrofitVersion = '2.1.0'
+        def rxbindingVersion = '1.0.0'
+        def autovalueVersion = '1.4'
+
+        compile "com.android.support:appcompat-v7:$supportVersion"
+        compile "com.android.support:recyclerview-v7:$supportVersion"
+        compile "com.android.support:cardview-v7:$supportVersion"
+        compile "com.android.support:design:$supportVersion"
+        compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+        compile "com.google.dagger:dagger:$daggerVersion"
+        annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+        provided 'org.glassfish:javax.annotation:10.0-b28'
+
+        compile "net.grandcentrix.thirtyinch:thirtyinch:$thirtyinchVersion"
+        compile "net.grandcentrix.thirtyinch:thirtyinch-rx:$thirtyinchVersion"
+        compile "net.grandcentrix.thirtyinch:thirtyinch-plugin:$thirtyinchVersion"
+
+        compile "com.jakewharton:butterknife:$butterknifeVersion"
+        annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+
+        debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
+        releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
+        testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
+
+        compile "com.jakewharton.rxbinding:rxbinding:$rxBindingVersion"
+        compile "com.jakewharton.rxbinding:rxbinding-design:$rxBindingVersion"
+
+        compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+        compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+        compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+
+        compile "com.jakewharton.rxbinding:rxbinding:$rxbindingVersion"
+        compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$rxbindingVersion"
+        compile "com.jakewharton.rxbinding:rxbinding-design:$rxbindingVersion"
+
+        compile "com.google.auto.value:auto-value:$autovalueVersion"
+        annotationProcessor "com.google.auto.value:auto-value:$autovalueVersion"
+        annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
+
+        compile 'com.pascalwelsch.compositeandroid:activity:25.3.0'
+        compile 'com.pascalwelsch.compositeandroid:fragment:25.3.0'
+
+        compile 'io.reactivex:rxjava:1.2.9'
+        compile 'io.reactivex:rxandroid:1.2.1'
+
+        compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+
+        //compile "com.mikepenz:itemanimators:0.5.0@aar"
+
+        //compile 'com.github.bumptech.glide:glide:3.7.0'
+
+        //compile 'com.github.arimorty:floatingsearchview:2.0.3'
+
+        //compile 'com.lucasurbas:listitemview:1.0.0'
+
+        compile 'com.jakewharton.timber:timber:4.5.1'
+
+        compile 'org.greenrobot:eventbus:3.0.0'
+    }
+}

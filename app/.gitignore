@@ -1,0 +1,7 @@
+/build
+*iml
+*.iml
+.idea
+fabric.properties
+google-services.json
+*.apk
