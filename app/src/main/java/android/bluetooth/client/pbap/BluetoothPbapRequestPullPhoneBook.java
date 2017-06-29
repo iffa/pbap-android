@@ -16,10 +16,9 @@
 
 package android.bluetooth.client.pbap;
 
-import android.util.Log;
+import android.bluetooth.client.pbap.utils.ObexAppParameters;
 
 import com.android.vcard.VCardEntry;
-import android.bluetooth.client.pbap.utils.ObexAppParameters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,10 +26,9 @@ import java.util.ArrayList;
 
 import javax.obex.HeaderSet;
 
+import timber.log.Timber;
+
 final class BluetoothPbapRequestPullPhoneBook extends BluetoothPbapRequest {
-
-    private static final String TAG = "BluetoothPbapRequestPullPhoneBook";
-
     private static final String TYPE = "x-bt/phonebook";
 
     private BluetoothPbapVcardList mResponse;
@@ -40,7 +38,7 @@ final class BluetoothPbapRequestPullPhoneBook extends BluetoothPbapRequest {
     private final byte mFormat;
 
     public BluetoothPbapRequestPullPhoneBook(String pbName, long filter, byte format,
-            int maxListCount, int listStartOffset) {
+                                             int maxListCount, int listStartOffset) {
 
         if (maxListCount < 0 || maxListCount > 65535) {
             throw new IllegalArgumentException("maxListCount should be [0..65535]");
@@ -89,14 +87,14 @@ final class BluetoothPbapRequestPullPhoneBook extends BluetoothPbapRequest {
 
     @Override
     protected void readResponse(InputStream stream) throws IOException {
-        Log.v(TAG, "readResponse");
+        Timber.v("readResponse");
 
         mResponse = new BluetoothPbapVcardList(stream, mFormat);
     }
 
     @Override
     protected void readResponseHeaders(HeaderSet headerset) {
-        Log.v(TAG, "readResponse");
+        Timber.v("readResponse");
 
         ObexAppParameters oap = ObexAppParameters.fromHeaderSet(headerset);
 

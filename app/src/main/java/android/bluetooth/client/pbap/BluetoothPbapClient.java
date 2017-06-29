@@ -19,9 +19,10 @@ package android.bluetooth.client.pbap;
 import android.bluetooth.BluetoothDevice;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
+
+import timber.log.Timber;
 
 /**
  * Public API to control Phone Book Profile (PCE role only).
@@ -72,8 +73,6 @@ import java.lang.ref.WeakReference;
  * connection and disconnection happens automatically internally.
  */
 public class BluetoothPbapClient {
-    private static final String TAG = "BluetoothPbapClient";
-
     /**
      * Path to local incoming calls history object
      */
@@ -220,6 +219,7 @@ public class BluetoothPbapClient {
      * request.
      * <p>
      * This event indicates that request completed successfully.
+     *
      * @see #setPhoneBookFolderRoot
      * @see #setPhoneBookFolderUp
      * @see #setPhoneBookFolderDown
@@ -243,6 +243,7 @@ public class BluetoothPbapClient {
      * <td>which is a list of <code>VCardEntry</code> objects</td>
      * </tr>
      * </table>
+     *
      * @see #pullPhoneBook
      */
     public static final int EVENT_PULL_PHONE_BOOK_DONE = 2;
@@ -265,6 +266,7 @@ public class BluetoothPbapClient {
      * <td>which is a list of <code>BluetoothPbapCard</code> objects</td>
      * </tr>
      * </table>
+     *
      * @see #pullVcardListing
      */
     public static final int EVENT_PULL_VCARD_LISTING_DONE = 3;
@@ -281,6 +283,7 @@ public class BluetoothPbapClient {
      * <td>vCard as and object of type <code>VCardEntry</code></td>
      * </tr>
      * </table>
+     *
      * @see #pullVcardEntry
      */
     public static final int EVENT_PULL_VCARD_ENTRY_DONE = 4;
@@ -298,6 +301,7 @@ public class BluetoothPbapClient {
      * <td>size of the phone book</td>
      * </tr>
      * </table>
+     *
      * @see #pullPhoneBookSize
      */
     public static final int EVENT_PULL_PHONE_BOOK_SIZE_DONE = 5;
@@ -315,6 +319,7 @@ public class BluetoothPbapClient {
      * <td>size of the phone book listing</td>
      * </tr>
      * </table>
+     *
      * @see #pullVcardListingSize
      */
     public static final int EVENT_PULL_VCARD_LISTING_SIZE_DONE = 6;
@@ -388,7 +393,7 @@ public class BluetoothPbapClient {
 
         @Override
         public void handleMessage(Message msg) {
-            Log.d(TAG, "handleMessage: what=" + msg.what);
+            Timber.d("handleMessage: what=" + msg.what);
 
             BluetoothPbapClient client = mClient.get();
             if (client == null) {
@@ -396,8 +401,7 @@ public class BluetoothPbapClient {
             }
 
             switch (msg.what) {
-                case BluetoothPbapSession.REQUEST_FAILED:
-                {
+                case BluetoothPbapSession.REQUEST_FAILED: {
                     BluetoothPbapRequest req = (BluetoothPbapRequest) msg.obj;
 
                     if (req instanceof BluetoothPbapRequestPullPhoneBookSize) {
@@ -417,8 +421,7 @@ public class BluetoothPbapClient {
                     break;
                 }
 
-                case BluetoothPbapSession.REQUEST_COMPLETED:
-                {
+                case BluetoothPbapSession.REQUEST_COMPLETED: {
                     BluetoothPbapRequest req = (BluetoothPbapRequest) msg.obj;
 
                     if (req instanceof BluetoothPbapRequestPullPhoneBookSize) {
@@ -480,7 +483,9 @@ public class BluetoothPbapClient {
                     break;
             }
         }
-    };
+    }
+
+    ;
 
     private void sendToClient(int eventId) {
         sendToClient(eventId, 0, null);
@@ -501,10 +506,10 @@ public class BluetoothPbapClient {
     /**
      * Constructs PCE object
      *
-     * @param device BluetoothDevice that corresponds to remote acting in PSE
-     *            role
+     * @param device  BluetoothDevice that corresponds to remote acting in PSE
+     *                role
      * @param handler the handle that will be used by PCE to notify events and
-     *            results to application
+     *                results to application
      * @throws NullPointerException
      */
     public BluetoothPbapClient(BluetoothDevice device, Handler handler) {
@@ -556,9 +561,9 @@ public class BluetoothPbapClient {
      * Sets current folder to root
      *
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_SET_PHONE_BOOK_DONE} or
-     *         {@link #EVENT_SET_PHONE_BOOK_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_SET_PHONE_BOOK_DONE} or
+     * {@link #EVENT_SET_PHONE_BOOK_ERROR} in case of failure
      */
     public boolean setPhoneBookFolderRoot() {
         BluetoothPbapRequest req = new BluetoothPbapRequestSetPath(false);
@@ -569,9 +574,9 @@ public class BluetoothPbapClient {
      * Sets current folder to parent
      *
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_SET_PHONE_BOOK_DONE} or
-     *         {@link #EVENT_SET_PHONE_BOOK_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_SET_PHONE_BOOK_DONE} or
+     * {@link #EVENT_SET_PHONE_BOOK_ERROR} in case of failure
      */
     public boolean setPhoneBookFolderUp() {
         BluetoothPbapRequest req = new BluetoothPbapRequestSetPath(true);
@@ -583,9 +588,9 @@ public class BluetoothPbapClient {
      *
      * @param folder the name of the sub-folder
      * @return @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_SET_PHONE_BOOK_DONE} or
-     *         {@link #EVENT_SET_PHONE_BOOK_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_SET_PHONE_BOOK_DONE} or
+     * {@link #EVENT_SET_PHONE_BOOK_ERROR} in case of failure
      */
     public boolean setPhoneBookFolderDown(String folder) {
         BluetoothPbapRequest req = new BluetoothPbapRequestSetPath(folder);
@@ -597,9 +602,9 @@ public class BluetoothPbapClient {
      *
      * @param pbName absolute path to the phone book
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_PHONE_BOOK_SIZE_DONE} or
-     *         {@link #EVENT_PULL_PHONE_BOOK_SIZE_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_PHONE_BOOK_SIZE_DONE} or
+     * {@link #EVENT_PULL_PHONE_BOOK_SIZE_ERROR} in case of failure
      */
     public boolean pullPhoneBookSize(String pbName) {
         BluetoothPbapRequestPullPhoneBookSize req = new BluetoothPbapRequestPullPhoneBookSize(
@@ -613,9 +618,9 @@ public class BluetoothPbapClient {
      *
      * @param folder the name of the folder to be retrieved
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_LISTING_SIZE_DONE} or
-     *         {@link #EVENT_PULL_VCARD_LISTING_SIZE_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_VCARD_LISTING_SIZE_DONE} or
+     * {@link #EVENT_PULL_VCARD_LISTING_SIZE_ERROR} in case of failure
      */
     public boolean pullVcardListingSize(String folder) {
         BluetoothPbapRequestPullVcardListingSize req = new BluetoothPbapRequestPullVcardListingSize(
@@ -632,9 +637,9 @@ public class BluetoothPbapClient {
      *
      * @param pbName absolute path to the phone book
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_PHONE_BOOK_DONE} or
-     *         {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_PHONE_BOOK_DONE} or
+     * {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
      */
     public boolean pullPhoneBook(String pbName) {
         return pullPhoneBook(pbName, 0, VCARD_TYPE_21, 0, 0);
@@ -646,12 +651,12 @@ public class BluetoothPbapClient {
      *
      * @param pbName absolute path to the phone book
      * @param filter bit mask which indicates which fields of the vCard shall be
-     *            included in each entry of the resulting list
+     *               included in each entry of the resulting list
      * @param format vCard format of entries in the resulting list
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_PHONE_BOOK_DONE} or
-     *         {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_PHONE_BOOK_DONE} or
+     * {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
      */
     public boolean pullPhoneBook(String pbName, long filter, byte format) {
         return pullPhoneBook(pbName, filter, format, 0, 0);
@@ -666,14 +671,14 @@ public class BluetoothPbapClient {
      * <code>VCARD_TYPE_21</code> which in turns contain minimal required set of
      * vCard fields.
      *
-     * @param pbName absolute path to the phone book
-     * @param maxListCount limits number of entries in the response
+     * @param pbName          absolute path to the phone book
+     * @param maxListCount    limits number of entries in the response
      * @param listStartOffset offset to the first entry of the list that would
-     *            be returned
+     *                        be returned
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_PHONE_BOOK_DONE} or
-     *         {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_PHONE_BOOK_DONE} or
+     * {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
      */
     public boolean pullPhoneBook(String pbName, int maxListCount, int listStartOffset) {
         return pullPhoneBook(pbName, 0, VCARD_TYPE_21, maxListCount, listStartOffset);
@@ -682,20 +687,20 @@ public class BluetoothPbapClient {
     /**
      * Pulls complete phone book.
      *
-     * @param pbName absolute path to the phone book
-     * @param filter bit mask which indicates which fields of the vCard hall be
-     *            included in each entry of the resulting list
-     * @param format vCard format of entries in the resulting list
-     * @param maxListCount limits number of entries in the response
+     * @param pbName          absolute path to the phone book
+     * @param filter          bit mask which indicates which fields of the vCard hall be
+     *                        included in each entry of the resulting list
+     * @param format          vCard format of entries in the resulting list
+     * @param maxListCount    limits number of entries in the response
      * @param listStartOffset offset to the first entry of the list that would
-     *            be returned
+     *                        be returned
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_PHONE_BOOK_DONE} or
-     *         {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_PHONE_BOOK_DONE} or
+     * {@link #EVENT_PULL_PHONE_BOOK_ERROR} in case of failure
      */
     public boolean pullPhoneBook(String pbName, long filter, byte format, int maxListCount,
-            int listStartOffset) {
+                                 int listStartOffset) {
         BluetoothPbapRequest req = new BluetoothPbapRequestPullPhoneBook(pbName, filter, format,
                 maxListCount, listStartOffset);
         return mSession.makeRequest(req);
@@ -708,9 +713,9 @@ public class BluetoothPbapClient {
      *
      * @param folder the name of the folder to be retrieved
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_LISTING_DONE} or
-     *         {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_VCARD_LISTING_DONE} or
+     * {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
      */
     public boolean pullVcardListing(String folder) {
         return pullVcardListing(folder, ORDER_BY_DEFAULT, SEARCH_ATTR_NAME, null, 0, 0);
@@ -720,11 +725,11 @@ public class BluetoothPbapClient {
      * Pulls list of entries in the <code>folder</code>.
      *
      * @param folder the name of the folder to be retrieved
-     * @param order the sorting order of the resulting list of entries
+     * @param order  the sorting order of the resulting list of entries
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_LISTING_DONE} or
-     *         {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_VCARD_LISTING_DONE} or
+     * {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
      */
     public boolean pullVcardListing(String folder, byte order) {
         return pullVcardListing(folder, order, SEARCH_ATTR_NAME, null, 0, 0);
@@ -735,15 +740,15 @@ public class BluetoothPbapClient {
      * <code>searchAttr</code> attribute of vCard matches <code>searchVal</code>
      * will be listed.
      *
-     * @param folder the name of the folder to be retrieved
+     * @param folder     the name of the folder to be retrieved
      * @param searchAttr vCard attribute which shall be used to carry out search
-     *            operation on
-     * @param searchVal text string used by matching routine to match the value
-     *            of the attribute indicated by SearchAttr
+     *                   operation on
+     * @param searchVal  text string used by matching routine to match the value
+     *                   of the attribute indicated by SearchAttr
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_LISTING_DONE} or
-     *         {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_VCARD_LISTING_DONE} or
+     * {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
      */
     public boolean pullVcardListing(String folder, byte searchAttr, String searchVal) {
         return pullVcardListing(folder, ORDER_BY_DEFAULT, searchAttr, searchVal, 0, 0);
@@ -752,18 +757,18 @@ public class BluetoothPbapClient {
     /**
      * Pulls list of entries in the <code>folder</code>.
      *
-     * @param folder the name of the folder to be retrieved
-     * @param order the sorting order of the resulting list of entries
-     * @param maxListCount limits number of entries in the response
+     * @param folder          the name of the folder to be retrieved
+     * @param order           the sorting order of the resulting list of entries
+     * @param maxListCount    limits number of entries in the response
      * @param listStartOffset offset to the first entry of the list that would
-     *            be returned
+     *                        be returned
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_LISTING_DONE} or
-     *         {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_VCARD_LISTING_DONE} or
+     * {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
      */
     public boolean pullVcardListing(String folder, byte order, int maxListCount,
-            int listStartOffset) {
+                                    int listStartOffset) {
         return pullVcardListing(folder, order, SEARCH_ATTR_NAME, null, maxListCount,
                 listStartOffset);
     }
@@ -771,14 +776,14 @@ public class BluetoothPbapClient {
     /**
      * Pulls list of entries in the <code>folder</code>.
      *
-     * @param folder the name of the folder to be retrieved
-     * @param maxListCount limits number of entries in the response
+     * @param folder          the name of the folder to be retrieved
+     * @param maxListCount    limits number of entries in the response
      * @param listStartOffset offset to the first entry of the list that would
-     *            be returned
+     *                        be returned
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_LISTING_DONE} or
-     *         {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_VCARD_LISTING_DONE} or
+     * {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
      */
     public boolean pullVcardListing(String folder, int maxListCount, int listStartOffset) {
         return pullVcardListing(folder, ORDER_BY_DEFAULT, SEARCH_ATTR_NAME, null, maxListCount,
@@ -788,22 +793,22 @@ public class BluetoothPbapClient {
     /**
      * Pulls list of entries in the <code>folder</code>.
      *
-     * @param folder the name of the folder to be retrieved
-     * @param order the sorting order of the resulting list of entries
-     * @param searchAttr vCard attribute which shall be used to carry out search
-     *            operation on
-     * @param searchVal text string used by matching routine to match the value
-     *            of the attribute indicated by SearchAttr
-     * @param maxListCount limits number of entries in the response
+     * @param folder          the name of the folder to be retrieved
+     * @param order           the sorting order of the resulting list of entries
+     * @param searchAttr      vCard attribute which shall be used to carry out search
+     *                        operation on
+     * @param searchVal       text string used by matching routine to match the value
+     *                        of the attribute indicated by SearchAttr
+     * @param maxListCount    limits number of entries in the response
      * @param listStartOffset offset to the first entry of the list that would
-     *            be returned
+     *                        be returned
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_LISTING_DONE} or
-     *         {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
+     * <code>false</code> otherwise; upon completion PCE sends
+     * {@link #EVENT_PULL_VCARD_LISTING_DONE} or
+     * {@link #EVENT_PULL_VCARD_LISTING_ERROR} in case of failure
      */
     public boolean pullVcardListing(String folder, byte order, byte searchAttr,
-            String searchVal, int maxListCount, int listStartOffset) {
+                                    String searchVal, int maxListCount, int listStartOffset) {
         BluetoothPbapRequest req = new BluetoothPbapRequestPullVcardListing(folder, order,
                 searchAttr, searchVal, maxListCount, listStartOffset);
         return mSession.makeRequest(req);
@@ -814,8 +819,7 @@ public class BluetoothPbapClient {
      *
      * @param handle handle to the vCard which shall be pulled
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_DONE} or
+     * <code>false</code> otherwise; upon completion PCE sends
      * @link #EVENT_PULL_VCARD_ERROR} in case of failure
      */
     public boolean pullVcardEntry(String handle) {
@@ -827,11 +831,10 @@ public class BluetoothPbapClient {
      *
      * @param handle handle to the vCard which shall be pulled
      * @param filter bit mask of the vCard fields that shall be included in the
-     *            resulting vCard
+     *               resulting vCard
      * @param format resulting vCard version
      * @return <code>true</code> if request has been sent successfully;
-     *         <code>false</code> otherwise; upon completion PCE sends
-     *         {@link #EVENT_PULL_VCARD_DONE}
+     * <code>false</code> otherwise; upon completion PCE sends
      * @link #EVENT_PULL_VCARD_ERROR} in case of failure
      */
     public boolean pullVcardEntry(String handle, long filter, byte format) {
@@ -840,7 +843,7 @@ public class BluetoothPbapClient {
     }
 
     public boolean setAuthResponse(String key) {
-        Log.d(TAG, " setAuthResponse key=" + key);
+        Timber.d(" setAuthResponse key=" + key);
         return mSession.setAuthResponse(key);
     }
 }

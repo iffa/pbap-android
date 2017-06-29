@@ -18,7 +18,6 @@ package android.bluetooth.client.pbap;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.client.pbap.utils.ObexAppParameters;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,11 +25,10 @@ import java.util.ArrayList;
 
 import javax.obex.HeaderSet;
 
+import timber.log.Timber;
+
 @SuppressLint("LongLogTag")
 final class BluetoothPbapRequestPullVcardListing extends BluetoothPbapRequest {
-
-    private static final String TAG = "BluetoothPbapRequestPullVcardListing";
-
     private static final String TYPE = "x-bt/vcard-listing";
 
     private BluetoothPbapVcardListing mResponse = null;
@@ -84,14 +82,14 @@ final class BluetoothPbapRequestPullVcardListing extends BluetoothPbapRequest {
 
     @Override
     protected void readResponse(InputStream stream) throws IOException {
-        Log.v(TAG, "readResponse");
+        Timber.v("readResponse");
 
         mResponse = new BluetoothPbapVcardListing(stream);
     }
 
     @Override
     protected void readResponseHeaders(HeaderSet headerset) {
-        Log.v(TAG, "readResponseHeaders");
+        Timber.v("readResponseHeaders");
 
         ObexAppParameters oap = ObexAppParameters.fromHeaderSet(headerset);
 

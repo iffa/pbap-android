@@ -16,21 +16,18 @@
 
 package android.bluetooth.client.pbap;
 
-import android.util.Log;
-
 import java.io.IOException;
 
 import javax.obex.ClientSession;
 import javax.obex.HeaderSet;
 import javax.obex.ResponseCodes;
 
+import timber.log.Timber;
+
 final class BluetoothPbapRequestSetPath extends BluetoothPbapRequest {
-
-    private final static String TAG = "BluetoothPbapRequestSetPath";
-
     private enum SetPathDir {
         ROOT, UP, DOWN
-    };
+    }
 
     private SetPathDir mDir;
 
@@ -50,7 +47,7 @@ final class BluetoothPbapRequestSetPath extends BluetoothPbapRequest {
 
     @Override
     public void execute(ClientSession session) {
-        Log.v(TAG, "execute");
+        Timber.v("execute");
 
         HeaderSet hs = null;
 

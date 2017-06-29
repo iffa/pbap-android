@@ -31,7 +31,6 @@ import java.util.List;
  * Entry representation of folder listing
  */
 public class BluetoothPbapCard {
-
     public final String handle;
 
     public final String N;

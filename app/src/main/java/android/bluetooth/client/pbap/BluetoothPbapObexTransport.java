@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import javax.obex.ObexTransport;
 
 class BluetoothPbapObexTransport implements ObexTransport {
-
     private BluetoothSocket mSocket = null;
 
     public BluetoothPbapObexTransport(BluetoothSocket rfs) {

@@ -32,16 +32,16 @@
 
 package javax.obex;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.DataInputStream;
 import java.io.OutputStream;
-import java.io.DataOutputStream;
-import java.io.ByteArrayOutputStream;
 
 /**
  * This class implements the Operation interface for server side connections.
- * <P>
+ * <p>
  * <STRONG>Request Codes</STRONG> There are four different request codes that
  * are in this class. 0x02 is a PUT request that signals that the request is not
  * complete and requires an additional OBEX packet. 0x82 is a PUT request that
@@ -50,6 +50,7 @@ import java.io.ByteArrayOutputStream;
  * finished. When the server receives a 0x83, the client is signaling the server
  * that it is done with its request. TODO: Extend the ClientOperation and reuse
  * the methods defined TODO: in that class.
+ *
  * @hide
  */
 public final class ServerOperation implements Operation, BaseStream {
@@ -92,16 +93,17 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Creates new ServerOperation
-     * @param p the parent that created this object
-     * @param in the input stream to read from
-     * @param out the output stream to write to
+     *
+     * @param p       the parent that created this object
+     * @param in      the input stream to read from
+     * @param out     the output stream to write to
      * @param request the initial request that was received from the client
      * @param maxSize the max packet size that the client will accept
-     * @param listen the listener that is responding to the request
+     * @param listen  the listener that is responding to the request
      * @throws IOException if an IO error occurs
      */
     public ServerOperation(ServerSession p, InputStream in, int request, int maxSize,
-            ServerRequestHandler listen) throws IOException {
+                           ServerRequestHandler listen) throws IOException {
 
         isAborted = false;
         mParent = p;
@@ -239,14 +241,15 @@ public final class ServerOperation implements Operation, BaseStream {
     /**
      * Determines if the operation should continue or should wait. If it should
      * continue, this method will continue the operation.
+     *
      * @param sendEmpty if <code>true</code> then this will continue the
-     *        operation even if no headers will be sent; if <code>false</code>
-     *        then this method will only continue the operation if there are
-     *        headers to send
-     * @param inStream if<code>true</code> the stream is input stream, otherwise
-     *        output stream
+     *                  operation even if no headers will be sent; if <code>false</code>
+     *                  then this method will only continue the operation if there are
+     *                  headers to send
+     * @param inStream  if<code>true</code> the stream is input stream, otherwise
+     *                  output stream
      * @return <code>true</code> if the operation was completed;
-     *         <code>false</code> if no operation took place
+     * <code>false</code> if no operation took place
      */
     public synchronized boolean continueOperation(boolean sendEmpty, boolean inStream)
             throws IOException {
@@ -275,11 +278,12 @@ public final class ServerOperation implements Operation, BaseStream {
     /**
      * Sends a reply to the client. If the reply is a OBEX_HTTP_CONTINUE, it
      * will wait for a response from the client before ending.
+     *
      * @param type the response code to send back to the client
      * @return <code>true</code> if the final bit was not set on the reply;
-     *         <code>false</code> if no reply was received because the operation
-     *         ended, an abort was received, or the final bit was set in the
-     *         reply
+     * <code>false</code> if no reply was received because the operation
+     * ended, an abort was received, or the final bit was set in the
+     * reply
      * @throws IOException if an IO error occurs
      */
     public synchronized boolean sendReply(int type) throws IOException {
@@ -366,20 +370,20 @@ public final class ServerOperation implements Operation, BaseStream {
                  * (End of Body) otherwise, we need to send 0x48 (Body)
                  */
                 if ((finalBitSet) || (mPrivateOutput.isClosed())) {
-                    if(mSendBodyHeader == true) {
+                    if (mSendBodyHeader == true) {
                         out.write(0x49);
                         bodyLength += 3;
-                        out.write((byte)(bodyLength >> 8));
-                        out.write((byte)bodyLength);
+                        out.write((byte) (bodyLength >> 8));
+                        out.write((byte) bodyLength);
                         out.write(body);
                     }
                 } else {
-                    if(mSendBodyHeader == true) {
-                    out.write(0x48);
-                    bodyLength += 3;
-                    out.write((byte)(bodyLength >> 8));
-                    out.write((byte)bodyLength);
-                    out.write(body);
+                    if (mSendBodyHeader == true) {
+                        out.write(0x48);
+                        bodyLength += 3;
+                        out.write((byte) (bodyLength >> 8));
+                        out.write((byte) bodyLength);
+                        out.write(body);
                     }
                 }
 
@@ -387,11 +391,11 @@ public final class ServerOperation implements Operation, BaseStream {
         }
 
         if ((finalBitSet) && (type == ResponseCodes.OBEX_HTTP_OK) && (orginalBodyLength <= 0)) {
-            if(mSendBodyHeader == true) {
+            if (mSendBodyHeader == true) {
                 out.write(0x49);
                 orginalBodyLength = 3;
-                out.write((byte)(orginalBodyLength >> 8));
-                out.write((byte)orginalBodyLength);
+                out.write((byte) (orginalBodyLength >> 8));
+                out.write((byte) orginalBodyLength);
             }
         }
 
@@ -507,8 +511,9 @@ public final class ServerOperation implements Operation, BaseStream {
      * Sends an ABORT message to the server. By calling this method, the
      * corresponding input and output streams will be closed along with this
      * object.
+     *
      * @throws IOException if the transaction has already ended or if an OBEX
-     *         server called this method
+     *                     server called this method
      */
     public void abort() throws IOException {
         throw new IOException("Called from a server");
@@ -518,6 +523,7 @@ public final class ServerOperation implements Operation, BaseStream {
      * Returns the headers that have been received during the operation.
      * Modifying the object returned has no effect on the headers that are sent
      * or retrieved.
+     *
      * @return the headers received during this <code>Operation</code>
      * @throws IOException if this <code>Operation</code> has been closed
      */
@@ -529,11 +535,12 @@ public final class ServerOperation implements Operation, BaseStream {
     /**
      * Specifies the headers that should be sent in the next OBEX message that
      * is sent.
+     *
      * @param headers the headers to send in the next message
-     * @throws IOException if this <code>Operation</code> has been closed or the
-     *         transaction has ended and no further messages will be exchanged
+     * @throws IOException              if this <code>Operation</code> has been closed or the
+     *                                  transaction has ended and no further messages will be exchanged
      * @throws IllegalArgumentException if <code>headers</code> was not created
-     *         by a call to <code>ServerRequestHandler.createHeaderSet()</code>
+     *                                  by a call to <code>ServerRequestHandler.createHeaderSet()</code>
      */
     public void sendHeaders(HeaderSet headers) throws IOException {
         ensureOpen();
@@ -554,12 +561,13 @@ public final class ServerOperation implements Operation, BaseStream {
     /**
      * Retrieves the response code retrieved from the server. Response codes are
      * defined in the <code>ResponseCodes</code> interface.
+     *
      * @return the response code retrieved from the server
      * @throws IOException if an error occurred in the transport layer during
-     *         the transaction; if this method is called on a
-     *         <code>HeaderSet</code> object created by calling
-     *         <code>createHeaderSet</code> in a <code>ClientSession</code>
-     *         object; if this is called from a server
+     *                     the transaction; if this method is called on a
+     *                     <code>HeaderSet</code> object created by calling
+     *                     <code>createHeaderSet</code> in a <code>ClientSession</code>
+     *                     object; if this is called from a server
      */
     public int getResponseCode() throws IOException {
         throw new IOException("Called from a server");
@@ -567,6 +575,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Always returns <code>null</code>
+     *
      * @return <code>null</code>
      */
     public String getEncoding() {
@@ -577,12 +586,13 @@ public final class ServerOperation implements Operation, BaseStream {
      * Returns the type of content that the resource connected to is providing.
      * E.g. if the connection is via HTTP, then the value of the content-type
      * header field is returned.
+     *
      * @return the content type of the resource that the URL references, or
-     *         <code>null</code> if not known
+     * <code>null</code> if not known
      */
     public String getType() {
         try {
-            return (String)requestHeader.getHeader(HeaderSet.TYPE);
+            return (String) requestHeader.getHeader(HeaderSet.TYPE);
         } catch (IOException e) {
             return null;
         }
@@ -592,12 +602,13 @@ public final class ServerOperation implements Operation, BaseStream {
      * Returns the length of the content which is being provided. E.g. if the
      * connection is via HTTP, then the value of the content-length header field
      * is returned.
+     *
      * @return the content length of the resource that this connection's URL
-     *         references, or -1 if the content length is not known
+     * references, or -1 if the content length is not known
      */
     public long getLength() {
         try {
-            Long temp = (Long)requestHeader.getHeader(HeaderSet.LENGTH);
+            Long temp = (Long) requestHeader.getHeader(HeaderSet.LENGTH);
 
             if (temp == null) {
                 return -1;
@@ -628,6 +639,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Open and return an input stream for a connection.
+     *
      * @return an input stream
      * @throws IOException if an I/O error occurs
      */
@@ -638,6 +650,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Open and return a data input stream for a connection.
+     *
      * @return an input stream
      * @throws IOException if an I/O error occurs
      */
@@ -647,6 +660,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Open and return an output stream for a connection.
+     *
      * @return an output stream
      * @throws IOException if an I/O error occurs
      */
@@ -670,6 +684,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Open and return a data output stream for a connection.
+     *
      * @return an output stream
      * @throws IOException if an I/O error occurs
      */
@@ -679,6 +694,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Closes the connection and ends the transaction
+     *
      * @throws IOException if the operation has already ended or is closed
      */
     public void close() throws IOException {
@@ -688,6 +704,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     /**
      * Verifies that the connection is open and no exceptions should be thrown.
+     *
      * @throws IOException if an exception needs to be thrown
      */
     public void ensureOpen() throws IOException {
@@ -702,10 +719,11 @@ public final class ServerOperation implements Operation, BaseStream {
     /**
      * Verifies that additional information may be sent. In other words, the
      * operation is not done.
-     * <P>
+     * <p>
      * Included to implement the BaseStream interface only. It does not do
      * anything on the server side since the operation of the Operation object
      * is not done until after the handler returns from its method.
+     *
      * @throws IOException if the operation is completed
      */
     public void ensureNotDone() throws IOException {
@@ -715,15 +733,16 @@ public final class ServerOperation implements Operation, BaseStream {
      * Called when the output or input stream is closed. It does not do anything
      * on the server side since the operation of the Operation object is not
      * done until after the handler returns from its method.
+     *
      * @param inStream <code>true</code> if the input stream is closed;
-     *        <code>false</code> if the output stream is closed
+     *                 <code>false</code> if the output stream is closed
      * @throws IOException if an IO error occurs
      */
     public void streamClosed(boolean inStream) throws IOException {
 
     }
 
-    public void noBodyHeader(){
+    public void noBodyHeader() {
         mSendBodyHeader = false;
     }
 }

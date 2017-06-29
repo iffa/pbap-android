@@ -45,12 +45,13 @@ import java.io.OutputStream;
  * platform, Irda). This interface provides an abstract layer to be used by the
  * <code>ObexConnection</code>. Each kind of medium shall have its own
  * implementation to wrap and follow the same interface.
- * <P>
+ * <p>
  * See section 1.2.2 of IrDA Object Exchange Protocol specification.
- * <P>
+ * <p>
  * Different kind of medium may have different construction - for example, the
  * RFCOMM device file medium may be constructed from a file descriptor or simply
  * a string while the TCP medium usually from a socket.
+ *
  * @hide
  */
 public interface ObexTransport {

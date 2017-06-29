@@ -32,12 +32,13 @@
 
 package javax.obex;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This object provides an input stream to the Operation objects used in this
  * package.
+ *
  * @hide
  */
 public final class PrivateInputStream extends InputStream {
@@ -52,6 +53,7 @@ public final class PrivateInputStream extends InputStream {
 
     /**
      * Creates an input stream for the <code>Operation</code> to read from
+     *
      * @param p the connection this input stream is for
      */
     public PrivateInputStream(BaseStream p) {
@@ -66,8 +68,9 @@ public final class PrivateInputStream extends InputStream {
      * input stream without blocking by the next caller of a method for this
      * input stream. The next caller might be the same thread or or another
      * thread.
+     *
      * @return the number of bytes that can be read from this input stream
-     *         without blocking
+     * without blocking
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -82,8 +85,9 @@ public final class PrivateInputStream extends InputStream {
      * the end of the stream has been reached, the value -1 is returned. This
      * method blocks until input data is available, the end of the stream is
      * detected, or an exception is thrown.
+     *
      * @return the byte read from the input stream or -1 if it reaches the end of
-     *         stream
+     * stream
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -141,7 +145,8 @@ public final class PrivateInputStream extends InputStream {
     /**
      * Allows the <code>OperationImpl</code> thread to add body data to the
      * input stream.
-     * @param body the data to add to the stream
+     *
+     * @param body  the data to add to the stream
      * @param start the start of the body to array to copy
      */
     public synchronized void writeBytes(byte[] body, int start) {
@@ -159,6 +164,7 @@ public final class PrivateInputStream extends InputStream {
 
     /**
      * Verifies that this stream is open
+     *
      * @throws IOException if the stream is not open
      */
     private void ensureOpen() throws IOException {
@@ -171,6 +177,7 @@ public final class PrivateInputStream extends InputStream {
     /**
      * Closes the input stream. If the input stream is already closed, do
      * nothing.
+     *
      * @throws IOException this will never happen
      */
     @Override

@@ -17,7 +17,6 @@
 package android.bluetooth.client.pbap;
 
 import android.os.Handler;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -26,10 +25,10 @@ import javax.obex.HeaderSet;
 import javax.obex.ObexTransport;
 import javax.obex.ResponseCodes;
 
-final class BluetoothPbapObexSession {
-    private static final String TAG = "BluetoothPbapObexSession";
+import timber.log.Timber;
 
-    private static final byte[] PBAP_TARGET = new byte[] {
+final class BluetoothPbapObexSession {
+    private static final byte[] PBAP_TARGET = new byte[]{
             0x79, 0x61, 0x35, (byte) 0xf0, (byte) 0xf0, (byte) 0xc5, 0x11, (byte) 0xd8, 0x09, 0x66,
             0x08, 0x00, 0x20, 0x0c, (byte) 0x9a, 0x66
     };
@@ -52,7 +51,7 @@ final class BluetoothPbapObexSession {
     }
 
     public void start(Handler handler) {
-        Log.d(TAG, "start");
+        Timber.d("start");
         mSessionHandler = handler;
 
         mAuth = new BluetoothPbapObexAuthenticator(mSessionHandler);
@@ -62,7 +61,7 @@ final class BluetoothPbapObexSession {
     }
 
     public void stop() {
-        Log.d(TAG, "stop");
+        Timber.d("stop");
 
         if (mObexClientThread != null) {
             try {
@@ -75,7 +74,7 @@ final class BluetoothPbapObexSession {
     }
 
     public void abort() {
-        Log.d(TAG, "abort");
+        Timber.d("abort");
 
         if (mObexClientThread != null && mObexClientThread.mRequest != null) {
             /*
@@ -92,10 +91,10 @@ final class BluetoothPbapObexSession {
     }
 
     public boolean schedule(BluetoothPbapRequest request) {
-        Log.d(TAG, "schedule: " + request.getClass().getSimpleName());
+        Timber.d("schedule: " + request.getClass().getSimpleName());
 
         if (mObexClientThread == null) {
-            Log.e(TAG, "OBEX session not started");
+            Timber.e("OBEX session not started");
             return false;
         }
 
@@ -103,7 +102,7 @@ final class BluetoothPbapObexSession {
     }
 
     public boolean setAuthReply(String key) {
-        Log.d(TAG, "setAuthReply key=" + key);
+        Timber.d("setAuthReply key=" + key);
 
         if (mAuth == null) {
             return false;
@@ -178,7 +177,7 @@ final class BluetoothPbapObexSession {
         }
 
         public synchronized boolean schedule(BluetoothPbapRequest request) {
-            Log.d(TAG, "schedule: " + request.getClass().getSimpleName());
+            Timber.d("schedule: " + request.getClass().getSimpleName());
 
             if (mRequest != null) {
                 return false;
@@ -191,7 +190,7 @@ final class BluetoothPbapObexSession {
         }
 
         private boolean connect() {
-            Log.d(TAG, "connect");
+            Timber.d("connect");
 
             try {
                 mClientSession = new ClientSession(mTransport);
@@ -218,7 +217,7 @@ final class BluetoothPbapObexSession {
         }
 
         private void disconnect() {
-            Log.d(TAG, "disconnect");
+            Timber.d("disconnect");
 
             if (mClientSession != null) {
                 try {

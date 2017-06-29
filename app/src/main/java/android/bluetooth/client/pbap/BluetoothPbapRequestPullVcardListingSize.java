@@ -16,16 +16,13 @@
 
 package android.bluetooth.client.pbap;
 
-import android.util.Log;
-
 import android.bluetooth.client.pbap.utils.ObexAppParameters;
 
 import javax.obex.HeaderSet;
 
+import timber.log.Timber;
+
 class BluetoothPbapRequestPullVcardListingSize extends BluetoothPbapRequest {
-
-    private static final String TAG = "BluetoothPbapRequestPullVcardListingSize";
-
     private static final String TYPE = "x-bt/vcard-listing";
 
     private int mSize;
@@ -42,7 +39,7 @@ class BluetoothPbapRequestPullVcardListingSize extends BluetoothPbapRequest {
 
     @Override
     protected void readResponseHeaders(HeaderSet headerset) {
-        Log.v(TAG, "readResponseHeaders");
+        Timber.v("readResponseHeaders");
 
         ObexAppParameters oap = ObexAppParameters.fromHeaderSet(headerset);
 

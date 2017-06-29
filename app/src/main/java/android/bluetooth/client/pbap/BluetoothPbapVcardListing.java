@@ -16,7 +16,6 @@
 
 package android.bluetooth.client.pbap;
 
-import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -26,10 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 class BluetoothPbapVcardListing {
-
-    private static final String TAG = "BluetoothPbapVcardListing";
-
     ArrayList<BluetoothPbapCard> mCards = new ArrayList<BluetoothPbapCard>();
 
     public BluetoothPbapVcardListing(InputStream in) throws IOException {
@@ -56,7 +54,7 @@ class BluetoothPbapVcardListing {
                 eventType = parser.next();
             }
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "XML parser error when parsing XML", e);
+            Timber.e("XML parser error when parsing XML", e);
         }
     }
 

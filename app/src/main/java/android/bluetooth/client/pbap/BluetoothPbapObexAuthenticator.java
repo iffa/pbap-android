@@ -17,15 +17,13 @@
 package android.bluetooth.client.pbap;
 
 import android.os.Handler;
-import android.util.Log;
 
 import javax.obex.Authenticator;
 import javax.obex.PasswordAuthentication;
 
+import timber.log.Timber;
+
 class BluetoothPbapObexAuthenticator implements Authenticator {
-
-    private final static String TAG = "BluetoothPbapObexAuthenticator";
-
     private String mSessionKey;
 
     private boolean mReplied;
@@ -37,7 +35,7 @@ class BluetoothPbapObexAuthenticator implements Authenticator {
     }
 
     public synchronized void setReply(String key) {
-        Log.d(TAG, "setReply key=" + key);
+        Timber.d("setReply key=" + key);
 
         mSessionKey = key;
         mReplied = true;
@@ -47,31 +45,31 @@ class BluetoothPbapObexAuthenticator implements Authenticator {
 
     @Override
     public PasswordAuthentication onAuthenticationChallenge(String description,
-            boolean isUserIdRequired, boolean isFullAccess) {
+                                                            boolean isUserIdRequired, boolean isFullAccess) {
         PasswordAuthentication pa = null;
 
         mReplied = false;
 
-        Log.d(TAG, "onAuthenticationChallenge: sending request");
+        Timber.d("onAuthenticationChallenge: sending request");
         mCallback.obtainMessage(BluetoothPbapObexSession.OBEX_SESSION_AUTHENTICATION_REQUEST)
                 .sendToTarget();
 
         synchronized (this) {
             while (!mReplied) {
                 try {
-                    Log.v(TAG, "onAuthenticationChallenge: waiting for response");
+                    Timber.v("onAuthenticationChallenge: waiting for response");
                     this.wait();
                 } catch (InterruptedException e) {
-                    Log.e(TAG, "Interrupted while waiting for challenge response");
+                    Timber.e("Interrupted while waiting for challenge response");
                 }
             }
         }
 
         if (mSessionKey != null && mSessionKey.length() != 0) {
-            Log.v(TAG, "onAuthenticationChallenge: mSessionKey=" + mSessionKey);
+            Timber.v("onAuthenticationChallenge: mSessionKey=" + mSessionKey);
             pa = new PasswordAuthentication(null, mSessionKey.getBytes());
         } else {
-            Log.v(TAG, "onAuthenticationChallenge: mSessionKey is empty, timeout/cancel occured");
+            Timber.v("onAuthenticationChallenge: mSessionKey is empty, timeout/cancel occured");
         }
 
         return pa;

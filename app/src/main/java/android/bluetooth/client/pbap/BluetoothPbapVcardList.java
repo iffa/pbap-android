@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 class BluetoothPbapVcardList {
-
     private final ArrayList<VCardEntry> mCards = new ArrayList<VCardEntry>();
 
     class CardEntryHandler implements VCardEntryHandler {

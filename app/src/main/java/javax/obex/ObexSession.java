@@ -40,9 +40,10 @@ import java.io.IOException;
  * could be the server-side view of an OBEX connection, or the client-side view
  * of the same connection, which is established by server's accepting of a
  * client issued "CONNECT".
- * <P>
+ * <p>
  * This interface serves as the common super class for
  * <CODE>ClientSession</CODE> and <CODE>ServerSession</CODE>.
+ *
  * @hide
  */
 public class ObexSession {
@@ -54,9 +55,10 @@ public class ObexSession {
     /**
      * Called when the server received an authentication challenge header. This
      * will cause the authenticator to handle the authentication challenge.
+     *
      * @param header the header with the authentication challenge
      * @return <code>true</code> if the last request should be resent;
-     *         <code>false</code> if the last request should not be resent
+     * <code>false</code> if the last request should not be resent
      * @throws IOException
      */
     public boolean handleAuthChall(HeaderSet header) throws IOException {
@@ -73,9 +75,9 @@ public class ObexSession {
          * 0x02 is the realm, which provides a description of which user name
          * and password to use.
          */
-        byte[] challenge = ObexHelper.getTagValue((byte)0x00, header.mAuthChall);
-        byte[] option = ObexHelper.getTagValue((byte)0x01, header.mAuthChall);
-        byte[] description = ObexHelper.getTagValue((byte)0x02, header.mAuthChall);
+        byte[] challenge = ObexHelper.getTagValue((byte) 0x00, header.mAuthChall);
+        byte[] option = ObexHelper.getTagValue((byte) 0x01, header.mAuthChall);
+        byte[] description = ObexHelper.getTagValue((byte) 0x02, header.mAuthChall);
 
         String realm = null;
         if (description != null) {
@@ -152,8 +154,8 @@ public class ObexSession {
          */
         if (userName != null) {
             header.mAuthResp = new byte[38 + userName.length];
-            header.mAuthResp[36] = (byte)0x01;
-            header.mAuthResp[37] = (byte)userName.length;
+            header.mAuthResp[36] = (byte) 0x01;
+            header.mAuthResp[37] = (byte) userName.length;
             System.arraycopy(userName, 0, header.mAuthResp, 38, userName.length);
         } else {
             header.mAuthResp = new byte[36];
@@ -163,18 +165,18 @@ public class ObexSession {
         byte[] digest = new byte[challenge.length + password.length + 1];
         System.arraycopy(challenge, 0, digest, 0, challenge.length);
         // Insert colon between challenge and password
-        digest[challenge.length] = (byte)0x3A;
+        digest[challenge.length] = (byte) 0x3A;
         System.arraycopy(password, 0, digest, challenge.length + 1, password.length);
 
         // Add the Response Digest
-        header.mAuthResp[0] = (byte)0x00;
-        header.mAuthResp[1] = (byte)0x10;
+        header.mAuthResp[0] = (byte) 0x00;
+        header.mAuthResp[1] = (byte) 0x10;
 
         System.arraycopy(ObexHelper.computeMd5Hash(digest), 0, header.mAuthResp, 2, 16);
 
         // Add the challenge
-        header.mAuthResp[18] = (byte)0x02;
-        header.mAuthResp[19] = (byte)0x10;
+        header.mAuthResp[18] = (byte) 0x02;
+        header.mAuthResp[19] = (byte) 0x10;
         System.arraycopy(challenge, 0, header.mAuthResp, 20, 16);
 
         return true;
@@ -183,9 +185,10 @@ public class ObexSession {
     /**
      * Called when the server received an authentication response header. This
      * will cause the authenticator to handle the authentication response.
+     *
      * @param authResp the authentication response
      * @return <code>true</code> if the response passed; <code>false</code> if
-     *         the response failed
+     * the response failed
      */
     public boolean handleAuthResp(byte[] authResp) {
         if (mAuthenticator == null) {
@@ -193,7 +196,7 @@ public class ObexSession {
         }
         // get the correct password from the application
         byte[] correctPassword = mAuthenticator.onAuthenticationResponse(ObexHelper.getTagValue(
-                (byte)0x01, authResp));
+                (byte) 0x01, authResp));
         if (correctPassword == null) {
             return false;
         }
@@ -204,7 +207,7 @@ public class ObexSession {
         System.arraycopy(correctPassword, 0, temp, 16, correctPassword.length);
 
         byte[] correctResponse = ObexHelper.computeMd5Hash(temp);
-        byte[] actualResponse = ObexHelper.getTagValue((byte)0x00, authResp);
+        byte[] actualResponse = ObexHelper.getTagValue((byte) 0x00, authResp);
 
         // compare the MD5 hash array .
         for (int i = 0; i < 16; i++) {

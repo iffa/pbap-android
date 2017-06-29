@@ -24,14 +24,13 @@ import android.os.Handler.Callback;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.os.Process;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.UUID;
 
-class BluetoothPbapSession implements Callback {
-    private static final String TAG = "android.bluetooth.client.pbap.BluetoothPbapSession";
+import timber.log.Timber;
 
+class BluetoothPbapSession implements Callback {
     /* local use only */
     private static final int RFCOMM_CONNECTED = 1;
     private static final int RFCOMM_FAILED = 2;
@@ -88,7 +87,7 @@ class BluetoothPbapSession implements Callback {
 
     @Override
     public boolean handleMessage(Message msg) {
-        Log.d(TAG, "Handler: msg: " + msg.what);
+        Timber.d("Handler: msg: " + msg.what);
 
         switch (msg.what) {
             case RFCOMM_FAILED:
@@ -169,20 +168,20 @@ class BluetoothPbapSession implements Callback {
     }
 
     public void start() {
-        Log.d(TAG, "start");
+        Timber.d("start");
 
         startRfcomm();
     }
 
     public void stop() {
-        Log.d(TAG, "Stop");
+        Timber.d("Stop");
 
         stopObexSession();
         stopRfcomm();
     }
 
     public void abort() {
-        Log.d(TAG, "abort");
+        Timber.d("abort");
 
         /* fail pending request immediately */
         if (mPendingRequest != null) {
@@ -196,10 +195,10 @@ class BluetoothPbapSession implements Callback {
     }
 
     public boolean makeRequest(BluetoothPbapRequest request) {
-        Log.v(TAG, "makeRequest: " + request.getClass().getSimpleName());
+        Timber.v("makeRequest: " + request.getClass().getSimpleName());
 
         if (mPendingRequest != null) {
-            Log.w(TAG, "makeRequest: request already queued, exiting");
+            Timber.w("makeRequest: request already queued, exiting");
             return false;
         }
 
@@ -220,7 +219,7 @@ class BluetoothPbapSession implements Callback {
     }
 
     public boolean setAuthResponse(String key) {
-        Log.d(TAG, "setAuthResponse key=" + key);
+        Timber.d("setAuthResponse key=" + key);
 
         mSessionHandler
                 .removeMessages(BluetoothPbapObexSession.OBEX_SESSION_AUTHENTICATION_TIMEOUT);
@@ -234,7 +233,7 @@ class BluetoothPbapSession implements Callback {
     }
 
     private void startRfcomm() {
-        Log.d(TAG, "startRfcomm");
+        Timber.d("startRfcomm");
 
         if (mConnectThread == null && mObexSession == null) {
             mParentHandler.obtainMessage(SESSION_CONNECTING).sendToTarget();
@@ -250,7 +249,7 @@ class BluetoothPbapSession implements Callback {
     }
 
     private void stopRfcomm() {
-        Log.d(TAG, "stopRfcomm");
+        Timber.d("stopRfcomm");
 
         if (mConnectThread != null) {
             try {
@@ -272,14 +271,14 @@ class BluetoothPbapSession implements Callback {
     }
 
     private void startObexSession() {
-        Log.d(TAG, "startObexSession");
+        Timber.d("startObexSession");
 
         mObexSession = new BluetoothPbapObexSession(mTransport);
         mObexSession.start(mSessionHandler);
     }
 
     private void stopObexSession() {
-        Log.d(TAG, "stopObexSession");
+        Timber.d("stopObexSession");
 
         if (mObexSession != null) {
             mObexSession.stop();
@@ -323,7 +322,7 @@ class BluetoothPbapSession implements Callback {
                     mSocket.close();
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Error when closing socket", e);
+                Timber.e("Error when closing socket", e);
             }
         }
     }

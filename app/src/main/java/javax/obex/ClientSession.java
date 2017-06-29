@@ -39,6 +39,7 @@ import java.io.OutputStream;
 
 /**
  * This class in an implementation of the OBEX ClientSession.
+ *
  * @hide
  */
 public final class ClientSession extends ObexSession {
@@ -100,10 +101,10 @@ public final class ClientSession extends ObexSession {
         byte[] requestPacket = new byte[totalLength];
         // We just need to start at  byte 3 since the sendRequest() method will
         // handle the length and 0x80.
-        requestPacket[0] = (byte)0x10;
-        requestPacket[1] = (byte)0x00;
-        requestPacket[2] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT >> 8);
-        requestPacket[3] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT & 0xFF);
+        requestPacket[0] = (byte) 0x10;
+        requestPacket[1] = (byte) 0x00;
+        requestPacket[2] = (byte) (ObexHelper.MAX_PACKET_SIZE_INT >> 8);
+        requestPacket[3] = (byte) (ObexHelper.MAX_PACKET_SIZE_INT & 0xFF);
         if (head != null) {
             System.arraycopy(head, 0, requestPacket, 4, head.length);
         }
@@ -209,7 +210,7 @@ public final class ClientSession extends ObexSession {
             // Add the connection ID if one exists
             if (mConnectionId != null) {
                 head = new byte[5];
-                head[0] = (byte)HeaderSet.CONNECTION_ID;
+                head[0] = (byte) HeaderSet.CONNECTION_ID;
                 System.arraycopy(mConnectionId, 0, head, 1, 4);
             }
         }
@@ -341,8 +342,8 @@ public final class ClientSession extends ObexSession {
          * Byte 6 & up: headers
          */
         byte[] packet = new byte[totalLength];
-        packet[0] = (byte)flags;
-        packet[1] = (byte)0x00;
+        packet[0] = (byte) flags;
+        packet[1] = (byte) 0x00;
         if (headset != null) {
             System.arraycopy(head, 0, packet, 2, head.length);
         }
@@ -364,6 +365,7 @@ public final class ClientSession extends ObexSession {
 
     /**
      * Verifies that the connection is open.
+     *
      * @throws IOException if the connection is closed
      */
     public synchronized void ensureOpen() throws IOException {
@@ -376,12 +378,14 @@ public final class ClientSession extends ObexSession {
      * Set request inactive. Allows Put and get operation objects to tell this
      * object when they are done.
      */
-    /*package*/synchronized void setRequestInactive() {
+    /*package*/
+    synchronized void setRequestInactive() {
         mRequestActive = false;
     }
 
     /**
      * Set request to active.
+     *
      * @throws IOException if already active
      */
     private synchronized void setRequestActive() throws IOException {
@@ -396,17 +400,18 @@ public final class ClientSession extends ObexSession {
      * and update the header set object provided. If any authentication headers
      * (i.e. authentication challenge or authentication response) are received,
      * they will be processed.
-     * @param opCode the type of request to send to the client
-     * @param head the headers to send to the client
-     * @param header the header object to update with the response
+     *
+     * @param opCode       the type of request to send to the client
+     * @param head         the headers to send to the client
+     * @param header       the header object to update with the response
      * @param privateInput the input stream used by the Operation object; null
-     *        if this is called on a CONNECT, SETPATH or DISCONNECT return
-     *        <code>true</code> if the operation completed successfully;
-     *        <code>false</code> if an authentication response failed to pass
+     *                     if this is called on a CONNECT, SETPATH or DISCONNECT return
+     *                     <code>true</code> if the operation completed successfully;
+     *                     <code>false</code> if an authentication response failed to pass
      * @throws IOException if an IO error occurs
      */
     public boolean sendRequest(int opCode, byte[] head, HeaderSet header,
-            PrivateInputStream privateInput) throws IOException {
+                               PrivateInputStream privateInput) throws IOException {
         //check header length with local max size
         if (head != null) {
             if ((head.length + 3) > ObexHelper.MAX_PACKET_SIZE_INT) {
@@ -416,15 +421,15 @@ public final class ClientSession extends ObexSession {
 
         int bytesReceived;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        out.write((byte)opCode);
+        out.write((byte) opCode);
 
         // Determine if there are any headers to send
         if (head == null) {
             out.write(0x00);
             out.write(0x03);
         } else {
-            out.write((byte)((head.length + 3) >> 8));
-            out.write((byte)(head.length + 3));
+            out.write((byte) ((head.length + 3) >> 8));
+            out.write((byte) (head.length + 3));
             out.write(head);
         }
 
@@ -497,9 +502,9 @@ public final class ClientSession extends ObexSession {
                     && (header.mAuthChall != null)) {
 
                 if (handleAuthChall(header)) {
-                    out.write((byte)HeaderSet.AUTH_RESPONSE);
-                    out.write((byte)((header.mAuthResp.length + 3) >> 8));
-                    out.write((byte)(header.mAuthResp.length + 3));
+                    out.write((byte) HeaderSet.AUTH_RESPONSE);
+                    out.write((byte) ((header.mAuthResp.length + 3) >> 8));
+                    out.write((byte) (header.mAuthResp.length + 3));
                     out.write(header.mAuthResp);
                     header.mAuthChall = null;
                     header.mAuthResp = null;

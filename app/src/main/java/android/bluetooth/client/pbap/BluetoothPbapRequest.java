@@ -16,8 +16,6 @@
 
 package android.bluetooth.client.pbap;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -26,10 +24,9 @@ import javax.obex.ClientSession;
 import javax.obex.HeaderSet;
 import javax.obex.ResponseCodes;
 
+import timber.log.Timber;
+
 abstract class BluetoothPbapRequest {
-
-    private static final String TAG = "BluetoothPbapRequest";
-
     protected static final byte OAP_TAGID_ORDER = 0x01;
     protected static final byte OAP_TAGID_SEARCH_VALUE = 0x02;
     protected static final byte OAP_TAGID_SEARCH_ATTRIBUTE = 0x03;
@@ -57,7 +54,7 @@ abstract class BluetoothPbapRequest {
     }
 
     public void execute(ClientSession session) throws IOException {
-        Log.v(TAG, "execute");
+        Timber.v("execute");
 
         /* in case request is aborted before can be executed */
         if (mAborted) {
@@ -87,11 +84,11 @@ abstract class BluetoothPbapRequest {
 
             mResponseCode = mOp.getResponseCode();
 
-            Log.d(TAG, "mResponseCode=" + mResponseCode);
+            Timber.d("mResponseCode=" + mResponseCode);
 
             checkResponseCode(mResponseCode);
         } catch (IOException e) {
-            Log.e(TAG, "IOException occured when processing request", e);
+            Timber.e("IOException occured when processing request", e);
             mResponseCode = ResponseCodes.OBEX_HTTP_INTERNAL_ERROR;
 
             throw e;
@@ -105,25 +102,25 @@ abstract class BluetoothPbapRequest {
             try {
                 mOp.abort();
             } catch (IOException e) {
-                Log.e(TAG, "Exception occured when trying to abort", e);
+                Timber.e("Exception occured when trying to abort", e);
             }
         }
     }
 
     protected void readResponse(InputStream stream) throws IOException {
-        Log.v(TAG, "readResponse");
+        Timber.v("readResponse");
 
         /* nothing here by default */
     }
 
     protected void readResponseHeaders(HeaderSet headerset) {
-        Log.v(TAG, "readResponseHeaders");
+        Timber.v("readResponseHeaders");
 
         /* nothing here by dafault */
     }
 
     protected void checkResponseCode(int responseCode) throws IOException {
-        Log.v(TAG, "checkResponseCode");
+        Timber.v("checkResponseCode");
 
         /* nothing here by dafault */
     }
