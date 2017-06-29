@@ -30,9 +30,7 @@ final class BluetoothPbapRequestSetPath extends BluetoothPbapRequest {
 
     private enum SetPathDir {
         ROOT, UP, DOWN
-    }
-
-    ;
+    };
 
     private SetPathDir mDir;
 

@@ -57,9 +57,7 @@ public final class BmsgTokenizer {
             return ((o instanceof Property) && ((Property) o).name.equals(name) && ((Property) o).value
                     .equals(value));
         }
-    }
-
-    ;
+    };
 
     public BmsgTokenizer(String str) {
         this(str, 0);

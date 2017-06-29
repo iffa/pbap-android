@@ -16,10 +16,10 @@
 
 package android.bluetooth.client.pbap;
 
-import android.bluetooth.client.pbap.utils.ObexAppParameters;
 import android.util.Log;
 
 import com.android.vcard.VCardEntry;
+import android.bluetooth.client.pbap.utils.ObexAppParameters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +29,7 @@ import javax.obex.HeaderSet;
 
 final class BluetoothPbapRequestPullPhoneBook extends BluetoothPbapRequest {
 
-    private static final String TAG = BluetoothPbapRequestPullPhoneBook.class.getName();
+    private static final String TAG = "BluetoothPbapRequestPullPhoneBook";
 
     private static final String TYPE = "x-bt/phonebook";
 
@@ -40,7 +40,8 @@ final class BluetoothPbapRequestPullPhoneBook extends BluetoothPbapRequest {
     private final byte mFormat;
 
     public BluetoothPbapRequestPullPhoneBook(String pbName, long filter, byte format,
-                                             int maxListCount, int listStartOffset) {
+            int maxListCount, int listStartOffset) {
+
         if (maxListCount < 0 || maxListCount > 65535) {
             throw new IllegalArgumentException("maxListCount should be [0..65535]");
         }

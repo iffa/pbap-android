@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
- * Copyright (c) 2015 Samsung LSI
  * Copyright (c) 2008-2009, Motorola, Inc.
  *
  * All rights reserved.
@@ -36,19 +34,17 @@ package javax.obex;
 
 import android.util.Log;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
  * This class in an implementation of the OBEX ServerSession.
- *
  * @hide
  */
 public final class ServerSession extends ObexSession implements Runnable {
 
     private static final String TAG = "Obex ServerSession";
-    private static final boolean V = ObexHelper.VDBG;
 
     private ObexTransport mTransport;
 
@@ -66,12 +62,11 @@ public final class ServerSession extends ObexSession implements Runnable {
 
     /**
      * Creates new ServerSession.
-     *
-     * @param trans   the connection to the client
+     * @param trans the connection to the client
      * @param handler the event listener that will process requests
-     * @param auth    the authenticator to use with this connection
+     * @param auth the authenticator to use with this connection
      * @throws IOException if an error occurred while opening the input and
-     *                     output streams
+     *         output streams
      */
     public ServerSession(ObexTransport trans, ServerRequestHandler handler, Authenticator auth)
             throws IOException {
@@ -96,9 +91,7 @@ public final class ServerSession extends ObexSession implements Runnable {
 
             boolean done = false;
             while (!done && !mClosed) {
-                if (V) Log.v(TAG, "Waiting for incoming request...");
                 int requestType = mInput.read();
-                if (V) Log.v(TAG, "Read request: " + requestType);
                 switch (requestType) {
                     case ObexHelper.OBEX_OPCODE_CONNECT:
                         handleConnectRequest();
@@ -147,9 +140,9 @@ public final class ServerSession extends ObexSession implements Runnable {
             }
 
         } catch (NullPointerException e) {
-            Log.d(TAG, "Exception occured - ignoring", e);
+            Log.d(TAG, e.toString());
         } catch (Exception e) {
-            Log.d(TAG, "Exception occured - ignoring", e);
+            Log.d(TAG, e.toString());
         }
         close();
     }
@@ -170,7 +163,7 @@ public final class ServerSession extends ObexSession implements Runnable {
 
         int length = mInput.read();
         length = (length << 8) + mInput.read();
-        if (length > ObexHelper.getMaxRxPacketSize(mTransport)) {
+        if (length > ObexHelper.MAX_PACKET_SIZE_INT) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
         } else {
             for (int i = 3; i < length; i++) {
@@ -193,7 +186,6 @@ public final class ServerSession extends ObexSession implements Runnable {
      * <code>ServerOperation</code> object will always reply with a
      * OBEX_HTTP_CONTINUE reply. It will only reply if further information is
      * needed.
-     *
      * @param type the type of request received; either 0x02 or 0x82
      * @throws IOException if an error occurred at the transport layer
      */
@@ -223,7 +215,6 @@ public final class ServerSession extends ObexSession implements Runnable {
              *internal error should not be sent because server has already replied with
              *OK response in "sendReply")
              */
-            if (V) Log.d(TAG, "Exception occured - sending OBEX_HTTP_INTERNAL_ERROR reply", e);
             if (!op.isAborted) {
                 sendResponse(ResponseCodes.OBEX_HTTP_INTERNAL_ERROR, null);
             }
@@ -240,7 +231,6 @@ public final class ServerSession extends ObexSession implements Runnable {
      * <code>ServerOperation</code> object will always reply with a
      * OBEX_HTTP_CONTINUE reply. It will only reply if further information is
      * needed.
-     *
      * @param type the type of request received; either 0x03 or 0x83
      * @throws IOException if an error occurred at the transport layer
      */
@@ -253,15 +243,13 @@ public final class ServerSession extends ObexSession implements Runnable {
                 op.sendReply(response);
             }
         } catch (Exception e) {
-            if (V) Log.d(TAG, "Exception occured - sending OBEX_HTTP_INTERNAL_ERROR reply", e);
             sendResponse(ResponseCodes.OBEX_HTTP_INTERNAL_ERROR, null);
         }
     }
 
     /**
      * Send standard response.
-     *
-     * @param code   the response code to send
+     * @param code the response code to send
      * @param header the headers to include in the response
      * @throws IOException if an IO error occurs
      */
@@ -276,18 +264,18 @@ public final class ServerSession extends ObexSession implements Runnable {
         if (header != null) {
             totalLength += header.length;
             data = new byte[totalLength];
-            data[0] = (byte) code;
-            data[1] = (byte) (totalLength >> 8);
-            data[2] = (byte) totalLength;
+            data[0] = (byte)code;
+            data[1] = (byte)(totalLength >> 8);
+            data[2] = (byte)totalLength;
             System.arraycopy(header, 0, data, 3, header.length);
         } else {
             data = new byte[totalLength];
-            data[0] = (byte) code;
-            data[1] = (byte) 0x00;
-            data[2] = (byte) totalLength;
+            data[0] = (byte)code;
+            data[1] = (byte)0x00;
+            data[2] = (byte)totalLength;
         }
         op.write(data);
-        op.flush(); // TODO: Do we need to flush?
+        op.flush();
     }
 
     /**
@@ -297,7 +285,6 @@ public final class ServerSession extends ObexSession implements Runnable {
      * <code>ServerRequestHandler</code> object. After the handler processes the
      * request, this method will create a reply message to send to the server
      * with the response code provided.
-     *
      * @throws IOException if an error occurred at the transport layer
      */
     private void handleSetPathRequest() throws IOException {
@@ -317,7 +304,7 @@ public final class ServerSession extends ObexSession implements Runnable {
         flags = mInput.read();
         constants = mInput.read();
 
-        if (length > ObexHelper.getMaxRxPacketSize(mTransport)) {
+        if (length > ObexHelper.MAX_PACKET_SIZE_INT) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
             totalLength = 3;
         } else {
@@ -341,7 +328,7 @@ public final class ServerSession extends ObexSession implements Runnable {
                 if (request.mAuthResp != null) {
                     if (!handleAuthResp(request.mAuthResp)) {
                         code = ResponseCodes.OBEX_HTTP_UNAUTHORIZED;
-                        mListener.onAuthenticationFailure(ObexHelper.getTagValue((byte) 0x01,
+                        mListener.onAuthenticationFailure(ObexHelper.getTagValue((byte)0x01,
                                 request.mAuthResp));
                     }
                     request.mAuthResp = null;
@@ -371,8 +358,6 @@ public final class ServerSession extends ObexSession implements Runnable {
                 try {
                     code = mListener.onSetPath(request, reply, backup, create);
                 } catch (Exception e) {
-                    if (V)
-                        Log.d(TAG, "Exception occured - sending OBEX_HTTP_INTERNAL_ERROR reply", e);
                     sendResponse(ResponseCodes.OBEX_HTTP_INTERNAL_ERROR, null);
                     return;
                 }
@@ -406,9 +391,9 @@ public final class ServerSession extends ObexSession implements Runnable {
 
         // Compute Length of OBEX SETPATH packet
         byte[] replyData = new byte[totalLength];
-        replyData[0] = (byte) code;
-        replyData[1] = (byte) (totalLength >> 8);
-        replyData[2] = (byte) totalLength;
+        replyData[0] = (byte)code;
+        replyData[1] = (byte)(totalLength >> 8);
+        replyData[2] = (byte)totalLength;
         if (head != null) {
             System.arraycopy(head, 0, replyData, 3, head.length);
         }
@@ -426,7 +411,6 @@ public final class ServerSession extends ObexSession implements Runnable {
      * will create a <code>HeaderSet</code> object to pass to the
      * <code>ServerRequestHandler</code> object. After the handler processes the
      * request, this method will create a reply message to send to the server.
-     *
      * @throws IOException if an error occurred at the transport layer
      */
     private void handleDisconnectRequest() throws IOException {
@@ -441,7 +425,7 @@ public final class ServerSession extends ObexSession implements Runnable {
         length = mInput.read();
         length = (length << 8) + mInput.read();
 
-        if (length > ObexHelper.getMaxRxPacketSize(mTransport)) {
+        if (length > ObexHelper.MAX_PACKET_SIZE_INT) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
             totalLength = 3;
         } else {
@@ -466,7 +450,7 @@ public final class ServerSession extends ObexSession implements Runnable {
             if (request.mAuthResp != null) {
                 if (!handleAuthResp(request.mAuthResp)) {
                     code = ResponseCodes.OBEX_HTTP_UNAUTHORIZED;
-                    mListener.onAuthenticationFailure(ObexHelper.getTagValue((byte) 0x01,
+                    mListener.onAuthenticationFailure(ObexHelper.getTagValue((byte)0x01,
                             request.mAuthResp));
                 }
                 request.mAuthResp = null;
@@ -482,8 +466,6 @@ public final class ServerSession extends ObexSession implements Runnable {
                 try {
                     mListener.onDisconnect(request, reply);
                 } catch (Exception e) {
-                    if (V)
-                        Log.d(TAG, "Exception occured - sending OBEX_HTTP_INTERNAL_ERROR reply", e);
                     sendResponse(ResponseCodes.OBEX_HTTP_INTERNAL_ERROR, null);
                     return;
                 }
@@ -513,9 +495,9 @@ public final class ServerSession extends ObexSession implements Runnable {
         } else {
             replyData = new byte[3];
         }
-        replyData[0] = (byte) code;
-        replyData[1] = (byte) (totalLength >> 8);
-        replyData[2] = (byte) totalLength;
+        replyData[0] = (byte)code;
+        replyData[1] = (byte)(totalLength >> 8);
+        replyData[2] = (byte)totalLength;
         if (head != null) {
             System.arraycopy(head, 0, replyData, 3, head.length);
         }
@@ -534,7 +516,6 @@ public final class ServerSession extends ObexSession implements Runnable {
      * <code>ServerRequestHandler</code> object. After the handler processes the
      * request, this method will create a reply message to send to the server
      * with the response code provided.
-     *
      * @throws IOException if an error occurred at the transport layer
      */
     private void handleConnectRequest() throws IOException {
@@ -550,38 +531,23 @@ public final class ServerSession extends ObexSession implements Runnable {
         HeaderSet reply = new HeaderSet();
         int bytesReceived;
 
-        if (V) Log.v(TAG, "handleConnectRequest()");
-
         /*
          * Read in the length of the OBEX packet, OBEX version, flags, and max
          * packet length
          */
         packetLength = mInput.read();
         packetLength = (packetLength << 8) + mInput.read();
-        if (V) Log.v(TAG, "handleConnectRequest() - packetLength: " + packetLength);
-
         version = mInput.read();
         flags = mInput.read();
         mMaxPacketLength = mInput.read();
         mMaxPacketLength = (mMaxPacketLength << 8) + mInput.read();
-
-        if (V) Log.v(TAG, "handleConnectRequest() - version: " + version
-                + " MaxLength: " + mMaxPacketLength + " flags: " + flags);
 
         // should we check it?
         if (mMaxPacketLength > ObexHelper.MAX_PACKET_SIZE_INT) {
             mMaxPacketLength = ObexHelper.MAX_PACKET_SIZE_INT;
         }
 
-        if (mMaxPacketLength > ObexHelper.getMaxTxPacketSize(mTransport)) {
-            Log.w(TAG, "Requested MaxObexPacketSize " + mMaxPacketLength
-                    + " is larger than the max size supported by the transport: "
-                    + ObexHelper.getMaxTxPacketSize(mTransport)
-                    + " Reducing to this size.");
-            mMaxPacketLength = ObexHelper.getMaxTxPacketSize(mTransport);
-        }
-
-        if (packetLength > ObexHelper.getMaxRxPacketSize(mTransport)) {
+        if (packetLength > ObexHelper.MAX_PACKET_SIZE_INT) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
             totalLength = 7;
         } else {
@@ -606,7 +572,7 @@ public final class ServerSession extends ObexSession implements Runnable {
             if (request.mAuthResp != null) {
                 if (!handleAuthResp(request.mAuthResp)) {
                     code = ResponseCodes.OBEX_HTTP_UNAUTHORIZED;
-                    mListener.onAuthenticationFailure(ObexHelper.getTagValue((byte) 0x01,
+                    mListener.onAuthenticationFailure(ObexHelper.getTagValue((byte)0x01,
                             request.mAuthResp));
                 }
                 request.mAuthResp = null;
@@ -648,8 +614,7 @@ public final class ServerSession extends ObexSession implements Runnable {
                         code = ResponseCodes.OBEX_HTTP_INTERNAL_ERROR;
                     }
                 } catch (Exception e) {
-                    if (V)
-                        Log.d(TAG, "Exception occured - sending OBEX_HTTP_INTERNAL_ERROR reply", e);
+                    e.printStackTrace();
                     totalLength = 7;
                     head = null;
                     code = ResponseCodes.OBEX_HTTP_INTERNAL_ERROR;
@@ -668,14 +633,13 @@ public final class ServerSession extends ObexSession implements Runnable {
          * Packet Length (Defined in MAX_PACKET_SIZE) Byte 7 to n: headers
          */
         byte[] sendData = new byte[totalLength];
-        int maxRxLength = ObexHelper.getMaxRxPacketSize(mTransport);
-        sendData[0] = (byte) code;
+        sendData[0] = (byte)code;
         sendData[1] = length[2];
         sendData[2] = length[3];
-        sendData[3] = (byte) 0x10;
-        sendData[4] = (byte) 0x00;
-        sendData[5] = (byte) (maxRxLength >> 8);
-        sendData[6] = (byte) (maxRxLength & 0xFF);
+        sendData[3] = (byte)0x10;
+        sendData[4] = (byte)0x00;
+        sendData[5] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT >> 8);
+        sendData[6] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT & 0xFF);
 
         if (head != null) {
             System.arraycopy(head, 0, sendData, 7, head.length);
@@ -695,16 +659,11 @@ public final class ServerSession extends ObexSession implements Runnable {
             mListener.onClose();
         }
         try {
-            /* Set state to closed before interrupting the thread by closing the streams */
+            mInput.close();
+            mOutput.close();
+            mTransport.close();
             mClosed = true;
-            if (mInput != null)
-                mInput.close();
-            if (mOutput != null)
-                mOutput.close();
-            if (mTransport != null)
-                mTransport.close();
         } catch (Exception e) {
-            if (V) Log.d(TAG, "Exception occured during close() - ignore", e);
         }
         mTransport = null;
         mInput = null;
@@ -715,10 +674,9 @@ public final class ServerSession extends ObexSession implements Runnable {
     /**
      * Verifies that the response code is valid. If it is not valid, it will
      * return the <code>OBEX_HTTP_INTERNAL_ERROR</code> response code.
-     *
      * @param code the response code to check
      * @return the valid response code or <code>OBEX_HTTP_INTERNAL_ERROR</code>
-     * if <code>code</code> is not valid
+     *         if <code>code</code> is not valid
      */
     private int validateResponseCode(int code) {
 
@@ -744,7 +702,4 @@ public final class ServerSession extends ObexSession implements Runnable {
         return ResponseCodes.OBEX_HTTP_INTERNAL_ERROR;
     }
 
-    public ObexTransport getTransport() {
-        return mTransport;
-    }
 }

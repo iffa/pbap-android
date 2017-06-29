@@ -16,10 +16,10 @@
 
 package android.bluetooth.client.pbap;
 
-import android.bluetooth.client.pbap.utils.ObexAppParameters;
 import android.util.Log;
 
 import com.android.vcard.VCardEntry;
+import android.bluetooth.client.pbap.utils.ObexAppParameters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,14 +66,12 @@ final class BluetoothPbapRequestPullVcardEntry extends BluetoothPbapRequest {
 
         mResponse = new BluetoothPbapVcardList(stream, mFormat);
     }
-
     @Override
     protected void checkResponseCode(int responseCode) throws IOException {
         Log.v(TAG, "checkResponseCode");
 
         if (mResponse.getCount() == 0) {
-            if (responseCode != ResponseCodes.OBEX_HTTP_NOT_FOUND &&
-                    responseCode != ResponseCodes.OBEX_HTTP_NOT_ACCEPTABLE) {
+            if (responseCode != ResponseCodes.OBEX_HTTP_NOT_FOUND) {
                 throw new IOException("Invalid response received");
             } else {
                 Log.v(TAG, "Vcard Entry not found");

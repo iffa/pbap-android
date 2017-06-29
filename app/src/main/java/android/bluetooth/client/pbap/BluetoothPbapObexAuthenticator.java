@@ -47,7 +47,7 @@ class BluetoothPbapObexAuthenticator implements Authenticator {
 
     @Override
     public PasswordAuthentication onAuthenticationChallenge(String description,
-                                                            boolean isUserIdRequired, boolean isFullAccess) {
+            boolean isUserIdRequired, boolean isFullAccess) {
         PasswordAuthentication pa = null;
 
         mReplied = false;

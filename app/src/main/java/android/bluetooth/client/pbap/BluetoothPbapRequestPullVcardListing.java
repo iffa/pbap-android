@@ -16,6 +16,7 @@
 
 package android.bluetooth.client.pbap;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.client.pbap.utils.ObexAppParameters;
 import android.util.Log;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 import javax.obex.HeaderSet;
 
+@SuppressLint("LongLogTag")
 final class BluetoothPbapRequestPullVcardListing extends BluetoothPbapRequest {
 
     private static final String TAG = "BluetoothPbapRequestPullVcardListing";

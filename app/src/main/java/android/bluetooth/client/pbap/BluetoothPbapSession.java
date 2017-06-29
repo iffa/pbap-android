@@ -16,7 +16,6 @@
 
 package android.bluetooth.client.pbap;
 
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -31,7 +30,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 class BluetoothPbapSession implements Callback {
-    private static final String TAG = BluetoothPbapSession.class.getName();
+    private static final String TAG = "android.bluetooth.client.pbap.BluetoothPbapSession";
 
     /* local use only */
     private static final int RFCOMM_CONNECTED = 1;
@@ -52,7 +51,6 @@ class BluetoothPbapSession implements Callback {
 
     private static final String PBAP_UUID =
             "0000112f-0000-1000-8000-00805f9b34fb";
-
 
     private final BluetoothAdapter mAdapter;
     private final BluetoothDevice mDevice;
@@ -90,6 +88,8 @@ class BluetoothPbapSession implements Callback {
 
     @Override
     public boolean handleMessage(Message msg) {
+        Log.d(TAG, "Handler: msg: " + msg.what);
+
         switch (msg.what) {
             case RFCOMM_FAILED:
                 mConnectThread = null;
@@ -182,6 +182,7 @@ class BluetoothPbapSession implements Callback {
     }
 
     public void abort() {
+        Log.d(TAG, "abort");
 
         /* fail pending request immediately */
         if (mPendingRequest != null) {
@@ -295,7 +296,6 @@ class BluetoothPbapSession implements Callback {
             super("RfcommConnectThread");
         }
 
-        @SuppressLint("MissingPermission")
         @Override
         public void run() {
             if (mAdapter.isDiscovering()) {
@@ -304,16 +304,13 @@ class BluetoothPbapSession implements Callback {
 
             try {
                 mSocket = mDevice.createRfcommSocketToServiceRecord(UUID.fromString(PBAP_UUID));
-                //KLog.d("debug_ang : before connect(), state is : " + mSocket.isConnected());
                 mSocket.connect();
-                //KLog.d("debug_ang : after connect(), state is : " + mSocket.isConnected());
 
                 BluetoothPbapObexTransport transport;
                 transport = new BluetoothPbapObexTransport(mSocket);
 
                 mSessionHandler.obtainMessage(RFCOMM_CONNECTED, transport).sendToTarget();
             } catch (IOException e) {
-                //KLog.d("debug_ang : mSocket.connect() failed,  state : " + mSocket.isConnected());
                 closeSocket();
                 mSessionHandler.obtainMessage(RFCOMM_FAILED).sendToTarget();
             }

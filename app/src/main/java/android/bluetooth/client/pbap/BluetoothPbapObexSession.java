@@ -27,9 +27,9 @@ import javax.obex.ObexTransport;
 import javax.obex.ResponseCodes;
 
 final class BluetoothPbapObexSession {
-    private static final String TAG = BluetoothPbapObexSession.class.getName();
+    private static final String TAG = "BluetoothPbapObexSession";
 
-    private static final byte[] PBAP_TARGET = new byte[]{
+    private static final byte[] PBAP_TARGET = new byte[] {
             0x79, 0x61, 0x35, (byte) 0xf0, (byte) 0xf0, (byte) 0xc5, 0x11, (byte) 0xd8, 0x09, 0x66,
             0x08, 0x00, 0x20, 0x0c, (byte) 0x9a, 0x66
     };
@@ -207,7 +207,6 @@ final class BluetoothPbapObexSession {
                 hs = mClientSession.connect(hs);
 
                 if (hs.getResponseCode() != ResponseCodes.OBEX_HTTP_OK) {
-                    Log.d(TAG, "debug_ang : it is no OBEX_HTTP_OK ! ");
                     disconnect();
                     return false;
                 }
@@ -226,7 +225,6 @@ final class BluetoothPbapObexSession {
                     mClientSession.disconnect(null);
                     mClientSession.close();
                 } catch (IOException e) {
-                    Log.d(TAG, "disconnect catched exception: " + e.getMessage());
                 }
             }
         }

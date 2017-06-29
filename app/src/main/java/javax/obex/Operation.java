@@ -45,60 +45,60 @@ import java.io.OutputStream;
  * ends the operation, an <code>IOException</code> is thrown on the next read
  * from the input stream, write to the output stream, or call to
  * <code>sendHeaders()</code>.
- * <p>
+ * <P>
  * <STRONG>Definition of methods inherited from <code>ContentConnection</code>
  * </STRONG>
- * <p>
+ * <P>
  * <code>getEncoding()</code> will always return <code>null</code>. <BR>
  * <code>getLength()</code> will return the length specified by the OBEX Length
  * header or -1 if the OBEX Length header was not included. <BR>
  * <code>getType()</code> will return the value specified in the OBEX Type
  * header or <code>null</code> if the OBEX Type header was not included.<BR>
- * <p>
+ * <P>
  * <STRONG>How Headers are Handled</STRONG>
- * <p>
+ * <P>
  * As headers are received, they may be retrieved through the
  * <code>getReceivedHeaders()</code> method. If new headers are set during the
  * operation, the new headers will be sent during the next packet exchange.
- * <p>
+ * <P>
  * <STRONG>PUT example</STRONG>
- * <p>
+ * <P>
  * <PRE>
  * void putObjectViaOBEX(ClientSession conn, HeaderSet head, byte[] obj) throws IOException {
- * // Include the length header
- * head.setHeader(head.LENGTH, new Long(obj.length));
- * // Initiate the PUT request
- * Operation op = conn.put(head);
- * // Open the output stream to put the object to it
- * DataOutputStream out = op.openDataOutputStream();
- * // Send the object to the server
- * out.write(obj);
- * // End the transaction
- * out.close();
- * op.close();
+ *     // Include the length header
+ *     head.setHeader(head.LENGTH, new Long(obj.length));
+ *     // Initiate the PUT request
+ *     Operation op = conn.put(head);
+ *     // Open the output stream to put the object to it
+ *     DataOutputStream out = op.openDataOutputStream();
+ *     // Send the object to the server
+ *     out.write(obj);
+ *     // End the transaction
+ *     out.close();
+ *     op.close();
  * }
  * </PRE>
- * <p>
+ * <P>
  * <STRONG>GET example</STRONG>
- * <p>
+ * <P>
  * <PRE>
  * byte[] getObjectViaOBEX(ClientSession conn, HeaderSet head) throws IOException {
- * // Send the initial GET request to the server
- * Operation op = conn.get(head);
- * // Retrieve the length of the object being sent back
- * int length = op.getLength();
- * // Create space for the object
- * byte[] obj = new byte[length];
- * // Get the object from the input stream
- * DataInputStream in = trans.openDataInputStream();
- * in.read(obj);
- * // End the transaction
- * in.close();
- * op.close();
- * return obj;
+ *     // Send the initial GET request to the server
+ *     Operation op = conn.get(head);
+ *     // Retrieve the length of the object being sent back
+ *     int length = op.getLength();
+ *     // Create space for the object
+ *     byte[] obj = new byte[length];
+ *     // Get the object from the input stream
+ *     DataInputStream in = trans.openDataInputStream();
+ *     in.read(obj);
+ *     // End the transaction
+ *     in.close();
+ *     op.close();
+ *     return obj;
  * }
  * </PRE>
- * <p>
+ *
  * <H3>Client PUT Operation Flow</H3> For PUT operations, a call to
  * <code>close()</code> the <code>OutputStream</code> returned from
  * <code>openOutputStream()</code> or <code>openDataOutputStream()</code> will
@@ -113,7 +113,6 @@ import java.io.OutputStream;
  * will be set.) A call to <code>getResponseCode()</code> will cause an implicit
  * close on the <code>InputStream</code>. No further data may be read at this
  * point.
- *
  * @hide
  */
 public interface Operation {
@@ -123,9 +122,8 @@ public interface Operation {
      * corresponding input and output streams will be closed along with this
      * object. No headers are sent in the abort request. This will end the
      * operation since <code>close()</code> will be called by this method.
-     *
      * @throws IOException if the transaction has already ended or if an OBEX
-     *                     server calls this method
+     *         server calls this method
      */
     void abort() throws IOException;
 
@@ -133,7 +131,6 @@ public interface Operation {
      * Returns the headers that have been received during the operation.
      * Modifying the object returned has no effect on the headers that are sent
      * or retrieved.
-     *
      * @return the headers received during this <code>Operation</code>
      * @throws IOException if this <code>Operation</code> has been closed
      */
@@ -142,25 +139,23 @@ public interface Operation {
     /**
      * Specifies the headers that should be sent in the next OBEX message that
      * is sent.
-     *
      * @param headers the headers to send in the next message
-     * @throws IOException              if this <code>Operation</code> has been closed or the
-     *                                  transaction has ended and no further messages will be exchanged
+     * @throws IOException if this <code>Operation</code> has been closed or the
+     *         transaction has ended and no further messages will be exchanged
      * @throws IllegalArgumentException if <code>headers</code> was not created
-     *                                  by a call to <code>ServerRequestHandler.createHeaderSet()</code>
-     *                                  or <code>ClientSession.createHeaderSet()</code>
-     * @throws NullPointerException     if <code>headers</code> if <code>null</code>
+     *         by a call to <code>ServerRequestHandler.createHeaderSet()</code>
+     *         or <code>ClientSession.createHeaderSet()</code>
+     * @throws NullPointerException if <code>headers</code> if <code>null</code>
      */
     void sendHeaders(HeaderSet headers) throws IOException;
 
     /**
      * Returns the response code received from the server. Response codes are
      * defined in the <code>ResponseCodes</code> class.
-     *
+     * @see ResponseCodes
      * @return the response code retrieved from the server
      * @throws IOException if an error occurred in the transport layer during
-     *                     the transaction; if this object was created by an OBEX server
-     * @see ResponseCodes
+     *         the transaction; if this object was created by an OBEX server
      */
     int getResponseCode() throws IOException;
 
