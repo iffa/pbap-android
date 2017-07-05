@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
+import rx_activity_result.RxActivityResult;
 import timber.log.Timber;
 import xyz.santeri.pbap.injection.component.ApplicationComponent;
 import xyz.santeri.pbap.injection.component.DaggerApplicationComponent;
@@ -43,6 +44,8 @@ public class App extends Application {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         */
+
+        RxActivityResult.register(this);
     }
 
     public static App get(Context context) {

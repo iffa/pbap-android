@@ -3,6 +3,8 @@ package xyz.santeri.pbap.injection.component;
 import dagger.Subcomponent;
 import xyz.santeri.pbap.injection.PerActivity;
 import xyz.santeri.pbap.injection.module.ActivityModule;
+import xyz.santeri.pbap.ui.device.DevicePresenter;
+import xyz.santeri.pbap.ui.main.MainPresenter;
 
 /**
  * @author Santeri 'iffa'
@@ -10,9 +12,7 @@ import xyz.santeri.pbap.injection.module.ActivityModule;
 @PerActivity
 @Subcomponent(modules = {ActivityModule.class})
 public interface ActivityComponent {
-    /*
-    SearchPresenter searchPresenter();
+    MainPresenter mainPresenter();
 
-    DownloadPresenter downloadPresenter();
-    */
+    DevicePresenter devicePresenter();
 }

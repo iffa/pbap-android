@@ -43,6 +43,10 @@ public abstract class BaseAdapter<M> extends RecyclerView.Adapter<BaseViewHolder
         items.clear();
     }
 
+    public boolean contains(M item) {
+        return items.contains(item);
+    }
+
     @Override
     public int getItemCount() {
         return items == null ? 0 : items.size();
