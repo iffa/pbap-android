@@ -1,8 +1,10 @@
 package xyz.santeri.pbap.ui.device.adapter;
 
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.lucasurbas.listitemview.ListItemView;
 
@@ -28,5 +30,24 @@ public class DeviceViewHolder extends BaseViewHolder<BluetoothDevice> {
     public void bind(RecyclerView.Adapter adapter, BluetoothDevice item) {
         listItem.setTitle(item.getName());
         listItem.setSubtitle(item.getAddress());
+        switch (item.getBluetoothClass().getMajorDeviceClass()) {
+            // TODO: Day/night theme compatible icons
+            case BluetoothClass.Device.Major.AUDIO_VIDEO:
+                ((ImageView) listItem.findViewById(R.id.icon_view))
+                        .setImageResource(R.drawable.ic_headset_24dp);
+                break;
+            case BluetoothClass.Device.Major.COMPUTER:
+                ((ImageView) listItem.findViewById(R.id.icon_view))
+                        .setImageResource(R.drawable.ic_computer_24dp);
+                break;
+            case BluetoothClass.Device.Major.PHONE:
+                ((ImageView) listItem.findViewById(R.id.icon_view))
+                        .setImageResource(R.drawable.ic_smartphone_24dp);
+                break;
+            default:
+                ((ImageView) listItem.findViewById(R.id.icon_view))
+                        .setImageResource(R.drawable.ic_devices_other_24dp);
+                break;
+        }
     }
 }

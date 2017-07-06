@@ -40,7 +40,8 @@
         <xyz.santeri.pbap.ui.view.NonSwipeableViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:padding="@dimen/content_padding_small" />
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -113,11 +113,7 @@ dependencies {
 
         compile "com.mikepenz:itemanimators:0.5.0@aar"
 
-        //compile 'com.github.bumptech.glide:glide:3.7.0'
-
-        //compile 'com.github.arimorty:floatingsearchview:2.0.3'
-
-        compile 'com.lucasurbas:listitemview:1.0.0'
+        compile 'com.lucasurbas:listitemview:1.0.2' // TODO: 1.0.3 fixes vector drawables, not yet pushed to mvn
 
         compile 'com.github.badoualy:stepper-indicator:1.0.6'
 

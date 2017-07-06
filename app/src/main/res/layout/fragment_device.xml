@@ -5,7 +5,6 @@
     style="@style/CardView.DayNight"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/content_padding_small"
     app:cardCornerRadius="2dp"
     app:cardElevation="@dimen/cardview_default_elevation"
     app:cardUseCompatPadding="true">
@@ -24,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginBottom="@dimen/content_padding_mini"
+                android:layout_marginBottom="@dimen/content_padding_small"
                 android:layout_marginEnd="@dimen/content_padding"
                 android:layout_marginStart="@dimen/content_padding"
                 android:layout_marginTop="@dimen/content_padding_small"
@@ -59,7 +58,6 @@
             android:id="@+id/rv_found"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/content_padding_small"
             android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
