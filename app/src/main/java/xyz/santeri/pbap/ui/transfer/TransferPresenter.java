@@ -44,6 +44,8 @@ public class TransferPresenter extends TiPresenter<TransferView> {
         super.onDestroy();
 
         EventBus.getDefault().unregister(this);
+
+        bluetoothManager.stopPbapConnection();
     }
 
     void onActiveEvent(BluetoothDevice device) {

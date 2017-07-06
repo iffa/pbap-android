@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.lucasurbas.listitemview.ListItemView;
+
 import net.grandcentrix.thirtyinch.plugin.TiFragmentPlugin;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,6 +27,9 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @BindView(R.id.tv_connecting)
     TextView connectionText;
+
+    @BindView(R.id.item_device)
+    ListItemView deviceView;
 
     public TransferFragment() {
         addPlugin(presenterPlugin);
@@ -62,6 +67,9 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @Subscribe
     public void onActiveEvent(TransferFragmentActiveEvent event) {
         presenterPlugin.getPresenter().onActiveEvent(event.getDevice());
+
+        deviceView.setTitle(event.getDevice().getName());
+        deviceView.setSubtitle(event.getDevice().getAddress());
     }
 
     @Override

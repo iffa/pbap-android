@@ -61,7 +61,6 @@ dependencies {
         def butterknifeVersion = '8.5.1'
         def rxBindingVersion = '1.0.0'
         def leakcanaryVersion = '1.5'
-        def retrofitVersion = '2.1.0'
         def rxbindingVersion = '1.0.0'
         def autovalueVersion = '1.4'
 
@@ -89,10 +88,6 @@ dependencies {
         compile "com.jakewharton.rxbinding:rxbinding:$rxBindingVersion"
         compile "com.jakewharton.rxbinding:rxbinding-design:$rxBindingVersion"
 
-        compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-        compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-        compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
-
         compile "com.jakewharton.rxbinding:rxbinding:$rxbindingVersion"
         compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$rxbindingVersion"
         compile "com.jakewharton.rxbinding:rxbinding-design:$rxbindingVersion"
@@ -116,6 +111,8 @@ dependencies {
         compile 'com.lucasurbas:listitemview:1.0.2' // TODO: 1.0.3 fixes vector drawables, not yet pushed to mvn
 
         compile 'com.github.badoualy:stepper-indicator:1.0.6'
+
+        compile 'com.github.ybq:Android-SpinKit:1.1.0'
 
         compile 'com.jakewharton.timber:timber:4.5.1'
 

@@ -2,7 +2,7 @@
     <string name="app_name">Ultimate Contacts Copier</string>
     <string name="bt_continue">Continue</string>
     <string name="tv_start_title">Let\'s get started!</string>
-    <string name="tv_start_body">With UCC, your precious contacts can be transferred to your new device in a matter of minutes.\n\nWhy don\'t we get started? Simply tap the continue-button below.</string>
+    <string name="tv_start_body">With UCC, your precious contacts can be transferred to your new device in a matter of minutes.\n\nWhy don\'t we get started? Simply tap the continue-button below.\n\nNOTE: Make sure your old device has power and that it has Bluetooth turned on and it is discoverable. Accept any prompts on both devices.</string>
     <string name="bt_quit">Quit</string>
     <string name="tb_device">Choose a device</string>
     <string name="tb_transfer">Transfer</string>
@@ -19,7 +19,7 @@
     <string name="tv_connecting">Connecting to device…</string>
     <string name="tv_connected">Connected successfully.</string>
     <string name="tv_connection_error">Failed to connect.</string>
-    <string name="tv_transfer_started">Transfer started.</string>
+    <string name="tv_transfer_started">Transferring contacts…</string>
     <string name="tv_transfer_finished">Transfer finished.</string>
     <string name="tv_transfer_error">Transfer failed.</string>
 </resources>
