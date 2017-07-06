@@ -109,8 +109,12 @@ public class DeviceFragment extends BaseFragment implements DeviceView {
     }
 
     @Override
-    public void onDeviceFound(BluetoothDevice device) {
-        foundAdapter.addItem(device);
+    public void onDeviceFound(BluetoothDevice device, boolean addToStart) {
+        if (addToStart) {
+            foundAdapter.addItemAt(device, 0);
+        } else {
+            foundAdapter.addItem(device);
+        }
     }
 
     @Override

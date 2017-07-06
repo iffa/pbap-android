@@ -1,5 +1,6 @@
 package xyz.santeri.pbap.ui.device;
 
+import android.bluetooth.BluetoothClass;
 import android.support.annotation.NonNull;
 
 import net.grandcentrix.thirtyinch.TiPresenter;
@@ -76,9 +77,14 @@ public class DevicePresenter extends TiPresenter<DeviceView> {
                         .compose(rxUtil.observableSchedulers())
                         .compose(RxTiPresenterUtils.deliverToView(this))
                         .subscribe(device -> {
-                            Timber.d("Found device, name '%s'", device.getName());
-                            //noinspection ConstantConditions
-                            getView().onDeviceFound(device);
+                            Timber.d("Found device, name '%s', device class '%s'",
+                                    device.getName(), device.getBluetoothClass().getDeviceClass());
+
+                            if (device.getBluetoothClass().getMajorDeviceClass() == BluetoothClass.Device.Major.PHONE) {
+                                getView().onDeviceFound(device, true);
+                            } else {
+                                getView().onDeviceFound(device, false);
+                            }
                         }, throwable -> Timber.e(throwable, "Failed to observe found devices"))
         );
 

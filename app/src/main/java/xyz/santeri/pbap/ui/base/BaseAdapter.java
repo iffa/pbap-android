@@ -24,6 +24,11 @@ public abstract class BaseAdapter<M> extends RecyclerView.Adapter<BaseViewHolder
         notifyItemInserted(items.indexOf(item));
     }
 
+    public void addItemAt(M item, int position) {
+        items.add(position, item);
+        notifyItemInserted(items.indexOf(item));
+    }
+
     public void addItems(List<M> newItems) {
         items.addAll(newItems);
     }

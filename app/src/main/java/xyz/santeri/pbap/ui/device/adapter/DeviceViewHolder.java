@@ -49,5 +49,20 @@ public class DeviceViewHolder extends BaseViewHolder<BluetoothDevice> {
                         .setImageResource(R.drawable.ic_devices_other_24dp);
                 break;
         }
+
+        // Second switch statement with more fine-tuning to detect e.g. TVs
+        // It is up to device manufacturers to get this right
+        switch (item.getBluetoothClass().getDeviceClass()) {
+            case BluetoothClass.Device.AUDIO_VIDEO_VIDEO_DISPLAY_AND_LOUDSPEAKER:
+                ((ImageView) listItem.findViewById(R.id.icon_view))
+                        .setImageResource(R.drawable.ic_tv_24dp);
+                break;
+            case BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET:
+                // TODO: Icon
+                break;
+            case BluetoothClass.Device.AUDIO_VIDEO_HIFI_AUDIO:
+                // TODO: Icon
+                break;
+        }
     }
 }

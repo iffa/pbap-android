@@ -16,7 +16,7 @@ interface DeviceView extends TiView {
     Observable<BluetoothDevice> onDeviceClicked();
 
     @CallOnMainThread
-    void onDeviceFound(BluetoothDevice device);
+    void onDeviceFound(BluetoothDevice device, boolean addToStart);
 
     @CallOnMainThread
     void addPairedDevices(List<BluetoothDevice> devices);
