@@ -38,7 +38,7 @@ import xyz.santeri.pbap.injection.ApplicationContext;
 public class BluetoothManager {
     private final Context context;
     private final BluetoothAdapter bluetoothAdapter;
-    private final PbapEventHandler eventHandler = new PbapEventHandler();
+    private final DefaultPbapHandler eventHandler = new DefaultPbapHandler();
     private BluetoothPbapClient pbapClient;
 
     @Inject
@@ -97,6 +97,22 @@ public class BluetoothManager {
     }
 
     /**
+     * Pull the phone book size from the Bluetooth device.
+     * NOTE: Do NOT call this method unless you are absolutely certain you have established a PBAP
+     * connection with the device.
+     *
+     * @see BluetoothPbapClient.ConnectionState#CONNECTED
+     */
+    public void pullPhoneBookSize() {
+        if (pbapClient != null && pbapClient.getState() == BluetoothPbapClient.ConnectionState.CONNECTED) {
+            Timber.d("Pulling phone book size");
+            pbapClient.pullPhoneBookSize(BluetoothPbapClient.PB_PATH);
+        } else {
+            Timber.e("PBAP connection not established, can't pull phone book size");
+        }
+    }
+
+    /**
      * Get a list of already paired Bluetooth devices.
      *
      * @return List of paired devices
@@ -137,6 +153,11 @@ public class BluetoothManager {
                         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                         subscriber.onNext(device);
                     } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+                        if (pbapClient != null
+                                && (pbapClient.getState() == BluetoothPbapClient.ConnectionState.CONNECTING
+                                || pbapClient.getState() == BluetoothPbapClient.ConnectionState.CONNECTED)) {
+                            return;
+                        }
                         EventBus.getDefault().post(new DiscoveryFinishedEvent()); // TODO: Less hacky solution!
                     }
                 }
@@ -148,7 +169,7 @@ public class BluetoothManager {
         }));
     }
 
-    static class PbapEventHandler extends Handler {
+    static class DefaultPbapHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             Timber.v("Handling '%s'", msg);
@@ -165,6 +186,9 @@ public class BluetoothManager {
                     break;
                 case BluetoothPbapClient.EVENT_SESSION_DISCONNECTED:
                     Timber.i("BluetoothPbapClient.EVENT_SESSION_DISCONNECTED");
+                    break;
+                case BluetoothPbapClient.EVENT_SESSION_AUTH_TIMEOUT:
+                    Timber.w("EVENT_SESSION_AUTH_TIMEOUT");
                     break;
                 default:
                     Timber.w("Unexpected event '%s'", msg.what);

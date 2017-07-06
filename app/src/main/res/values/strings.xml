@@ -16,4 +16,10 @@
     <string name="action_help">Help</string>
     <string name="action_settings">Settings</string>
     <string name="action_retry">Retry</string>
+    <string name="tv_connecting">Connecting to device…</string>
+    <string name="tv_connected">Connected successfully.</string>
+    <string name="tv_connection_error">Failed to connect.</string>
+    <string name="tv_transfer_started">Transfer started.</string>
+    <string name="tv_transfer_finished">Transfer finished.</string>
+    <string name="tv_transfer_error">Transfer failed.</string>
 </resources>

@@ -1,7 +1,6 @@
 package xyz.santeri.pbap.ui.main;
 
 import android.os.Bundle;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -27,6 +26,7 @@ import xyz.santeri.pbap.ui.finish.FinishFragment;
 import xyz.santeri.pbap.ui.start.ContinueClickEvent;
 import xyz.santeri.pbap.ui.start.StartFragment;
 import xyz.santeri.pbap.ui.transfer.TransferFragment;
+import xyz.santeri.pbap.ui.transfer.TransferFragmentActiveEvent;
 import xyz.santeri.pbap.ui.view.NonSwipeableViewPager;
 
 public class MainActivity extends BaseActivity implements MainView {
@@ -82,8 +82,6 @@ public class MainActivity extends BaseActivity implements MainView {
         getSupportActionBar().setTitle(R.string.tb_device);
         viewPager.setCurrentItem(1, true);
 
-        TransitionManager.beginDelayedTransition(container);
-
         EventBus.getDefault().post(new DeviceFragmentActiveEvent());
 
         /*
@@ -107,6 +105,13 @@ public class MainActivity extends BaseActivity implements MainView {
                 break;
         }
         */
+    }
+
+    @Subscribe
+    public void onChooseDevice(TransferFragmentActiveEvent event) {
+        //noinspection ConstantConditions
+        getSupportActionBar().setTitle(R.string.tb_transfer);
+        viewPager.setCurrentItem(2, true);
     }
 
     @Override

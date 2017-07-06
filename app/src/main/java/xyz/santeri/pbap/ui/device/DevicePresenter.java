@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 import xyz.santeri.pbap.bluetooth.BluetoothManager;
 import xyz.santeri.pbap.bluetooth.DiscoveryFinishedEvent;
+import xyz.santeri.pbap.ui.transfer.TransferFragmentActiveEvent;
 import xyz.santeri.pbap.util.RxUtil;
 
 /**
@@ -39,6 +40,7 @@ public class DevicePresenter extends TiPresenter<DeviceView> {
                 view.onDeviceClicked()
                         .subscribe(device -> {
                             Timber.d("Device '%s' selected", device.getName());
+                            EventBus.getDefault().post(new TransferFragmentActiveEvent(device));
                         }));
     }
 
@@ -81,14 +83,18 @@ public class DevicePresenter extends TiPresenter<DeviceView> {
                                     device.getName(), device.getBluetoothClass().getDeviceClass());
 
                             if (device.getBluetoothClass().getMajorDeviceClass() == BluetoothClass.Device.Major.PHONE) {
+                                //noinspection ConstantConditions
                                 getView().onDeviceFound(device, true);
                             } else {
+                                //noinspection ConstantConditions
                                 getView().onDeviceFound(device, false);
                             }
                         }, throwable -> Timber.e(throwable, "Failed to observe found devices"))
         );
 
-        bluetoothManager.startDiscovery();
+        boolean success = bluetoothManager.startDiscovery();
+
+        if (!success) Timber.w("Failed to start Bluetooth discovery");
     }
 
     void onRequestCanceled() {
