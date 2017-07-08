@@ -112,8 +112,6 @@ dependencies {
 
         compile 'com.github.badoualy:stepper-indicator:1.0.6'
 
-        compile 'com.github.ybq:Android-SpinKit:1.1.0'
-
         compile 'com.jakewharton.timber:timber:4.5.1'
 
         compile 'org.greenrobot:eventbus:3.0.0'

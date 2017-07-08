@@ -24,10 +24,10 @@
             android:layout_marginBottom="@dimen/content_padding_small"
             android:layout_marginEnd="@dimen/content_padding"
             android:layout_marginStart="@dimen/content_padding"
-            app:stpi_circleColor="@color/cardview_light_background"
+            app:stpi_circleColor="#CCFFFFFF"
             app:stpi_circleStrokeWidth="2dp"
             app:stpi_indicatorColor="@color/colorAccent"
-            app:stpi_lineColor="@color/cardview_light_background"
+            app:stpi_lineColor="#CCFFFFFF"
             app:stpi_lineDoneColor="@color/colorAccent" />
     </android.support.design.widget.AppBarLayout>
 
