@@ -45,8 +45,6 @@ public class MainActivity extends BaseActivity implements MainView {
     @BindView(R.id.steps)
     StepperIndicator stepperIndicator;
 
-    private PagerAdapter pagerAdapter;
-
     public MainActivity() {
         addPlugin(presenterPlugin);
     }
@@ -59,7 +57,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
         setSupportActionBar(toolbar);
 
-        viewPager.setAdapter(pagerAdapter = new PagerAdapter(getSupportFragmentManager()));
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(2);
 
         stepperIndicator.setViewPager(viewPager, pagerAdapter.getCount() - 1);
@@ -110,7 +109,7 @@ public class MainActivity extends BaseActivity implements MainView {
     @Subscribe
     public void onChooseDevice(TransferFragmentActiveEvent event) {
         //noinspection ConstantConditions
-        getSupportActionBar().setTitle(R.string.tb_transfer);
+        getSupportActionBar().setTitle(R.string.app_name);
         viewPager.setCurrentItem(2, true);
     }
 

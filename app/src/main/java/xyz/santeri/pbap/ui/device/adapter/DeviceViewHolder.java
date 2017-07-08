@@ -1,6 +1,5 @@
 package xyz.santeri.pbap.ui.device.adapter;
 
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.santeri.pbap.R;
 import xyz.santeri.pbap.ui.base.BaseViewHolder;
+import xyz.santeri.pbap.ui.view.DeviceItemUtil;
 
 /**
  * @author Santeri 'iffa'
@@ -30,39 +30,8 @@ public class DeviceViewHolder extends BaseViewHolder<BluetoothDevice> {
     public void bind(RecyclerView.Adapter adapter, BluetoothDevice item) {
         listItem.setTitle(item.getName());
         listItem.setSubtitle(item.getAddress());
-        switch (item.getBluetoothClass().getMajorDeviceClass()) {
-            // TODO: Day/night theme compatible icons
-            case BluetoothClass.Device.Major.AUDIO_VIDEO:
-                ((ImageView) listItem.findViewById(R.id.icon_view))
-                        .setImageResource(R.drawable.ic_headset_24dp);
-                break;
-            case BluetoothClass.Device.Major.COMPUTER:
-                ((ImageView) listItem.findViewById(R.id.icon_view))
-                        .setImageResource(R.drawable.ic_computer_24dp);
-                break;
-            case BluetoothClass.Device.Major.PHONE:
-                ((ImageView) listItem.findViewById(R.id.icon_view))
-                        .setImageResource(R.drawable.ic_smartphone_24dp);
-                break;
-            default:
-                ((ImageView) listItem.findViewById(R.id.icon_view))
-                        .setImageResource(R.drawable.ic_devices_other_24dp);
-                break;
-        }
 
-        // Second switch statement with more fine-tuning to detect e.g. TVs
-        // It is up to device manufacturers to get this right
-        switch (item.getBluetoothClass().getDeviceClass()) {
-            case BluetoothClass.Device.AUDIO_VIDEO_VIDEO_DISPLAY_AND_LOUDSPEAKER:
-                ((ImageView) listItem.findViewById(R.id.icon_view))
-                        .setImageResource(R.drawable.ic_tv_24dp);
-                break;
-            case BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET:
-                // TODO: Icon
-                break;
-            case BluetoothClass.Device.AUDIO_VIDEO_HIFI_AUDIO:
-                // TODO: Icon
-                break;
-        }
+        ((ImageView) listItem.findViewById(R.id.icon_view))
+                .setImageResource(DeviceItemUtil.getIconForDevice(item));
     }
 }

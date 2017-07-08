@@ -97,6 +97,22 @@ public class BluetoothManager {
     }
 
     /**
+     * Pull the phone book from the Bluetooth device.
+     * NOTE: Do NOT call this method unless you are absolutely certain you have established a PBAP
+     * connection with the device.
+     *
+     * @see BluetoothPbapClient.ConnectionState#CONNECTED
+     */
+    public void pullPhoneBook(int count, int offset) {
+        if (pbapClient != null && pbapClient.getState() == BluetoothPbapClient.ConnectionState.CONNECTED) {
+            Timber.d("Pulling phone book, this can take a while");
+            pbapClient.pullPhoneBook(BluetoothPbapClient.PB_PATH, count, offset);
+        } else {
+            Timber.e("PBAP connection not established, can't pull phone book");
+        }
+    }
+
+    /**
      * Pull the phone book size from the Bluetooth device.
      * NOTE: Do NOT call this method unless you are absolutely certain you have established a PBAP
      * connection with the device.

@@ -92,9 +92,6 @@ public class DeviceFragment extends BaseFragment implements DeviceView {
         EventBus.getDefault().unregister(this);
     }
 
-    /**
-     * TODO: Don't draw divider after last item
-     */
     private void initRecyclerView() {
         foundRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         foundRecyclerView.setAdapter(foundAdapter = new DeviceAdapter());

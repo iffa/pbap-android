@@ -18,7 +18,7 @@
             android:id="@+id/item_device"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liv_displayMode="standard" />
+            app:liv_displayMode="icon" />
 
     </android.support.v7.widget.CardView>
 
@@ -35,21 +35,46 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/pb_transfer"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:indeterminate="true" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_transfer_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/content_padding"
+                    android:layout_weight="10"
+                    android:text="@string/tv_connecting"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <ProgressBar
+                    android:id="@+id/pb_transfer"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/content_padding"
+                    android:layout_weight="1"
+                    android:indeterminate="true" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_connecting"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_contacts_empty"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/content_padding"
-                android:text="@string/tv_connecting"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                android:layout_marginEnd="@dimen/content_padding"
+                android:layout_marginStart="@dimen/content_padding"
+                android:text="@string/tv_contacts_empty"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <xyz.santeri.pbap.ui.view.SwagRecyclerView
+                android:id="@+id/rv_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

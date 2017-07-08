@@ -5,11 +5,15 @@ import android.bluetooth.client.pbap.BluetoothPbapClient;
 import android.os.Handler;
 import android.os.Message;
 
+import com.android.vcard.VCardEntry;
+
 import net.grandcentrix.thirtyinch.TiPresenter;
 import net.grandcentrix.thirtyinch.rx.RxTiPresenterSubscriptionHandler;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -60,17 +64,23 @@ public class TransferPresenter extends TiPresenter<TransferView> {
         switch (msg.what) {
             case BluetoothPbapClient.EVENT_PULL_PHONE_BOOK_DONE:
                 Timber.i("EVENT_PULL_PHONE_BOOK_DONE");
+
                 bluetoothManager.stopPbapConnection();
-                sendToView(TransferView::showTransferFinished);
+                sendToView(view -> {
+                    view.showTransferFinished();
+
+                    //noinspection unchecked
+                    view.onContactsTransferred((List<VCardEntry>) msg.obj);
+                });
                 break;
             case BluetoothPbapClient.EVENT_PULL_PHONE_BOOK_ERROR:
                 Timber.e("EVENT_PULL_PHONE_BOOK_ERROR");
                 sendToView(TransferView::showTransferFailed);
                 break;
             case BluetoothPbapClient.EVENT_PULL_PHONE_BOOK_SIZE_DONE:
-                Timber.i("EVENT_PULL_PHONE_BOOK_SIZE_DONE");
+                Timber.d("Size of phone book from remote: %s", msg.arg1);
+                sendToView(view -> view.showTransferStarted(msg.arg1));
                 bluetoothManager.pullPhoneBook();
-                sendToView(TransferView::showTransferStarted);
                 break;
             case BluetoothPbapClient.EVENT_PULL_PHONE_BOOK_SIZE_ERROR:
                 Timber.e("EVENT_PULL_PHONE_BOOK_SIZE_ERROR");
