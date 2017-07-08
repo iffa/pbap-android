@@ -77,8 +77,6 @@ public class MainActivity extends BaseActivity implements MainView {
     public void onContinueClick(ContinueClickEvent event) {
         Timber.v("Continue clicked", viewPager.getCurrentItem());
 
-        //noinspection ConstantConditions
-        getSupportActionBar().setTitle(R.string.tb_device);
         viewPager.setCurrentItem(1, true);
 
         EventBus.getDefault().post(new DeviceFragmentActiveEvent());
@@ -108,8 +106,6 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Subscribe
     public void onChooseDevice(TransferFragmentActiveEvent event) {
-        //noinspection ConstantConditions
-        getSupportActionBar().setTitle(R.string.app_name);
         viewPager.setCurrentItem(2, true);
     }
 

@@ -8,7 +8,7 @@
     <string name="tb_transfer">Transfer</string>
     <string name="tb_done">Transfer completed</string>
     <string name="tv_paired_title">Paired devices</string>
-    <string name="tv_devices_title">Found devices</string>
+    <string name="tv_devices_title">Choose a device</string>
     <string name="tv_devices_empty">No devices found.</string>
     <string name="tv_devices_scanning">Searching for devices…</string>
     <string name="tv_paired_empty">No paired devices.</string>
