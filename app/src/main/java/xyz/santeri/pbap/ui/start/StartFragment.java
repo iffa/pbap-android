@@ -41,16 +41,14 @@ public class StartFragment extends BaseFragment {
 
         RxPermissions rxPermissions = new RxPermissions(getActivity());
         RxView.clicks(continueButton)
-                .compose(rxPermissions.ensureEach(Manifest.permission.ACCESS_COARSE_LOCATION))
-                .subscribe(permission -> {
-                    if (permission.granted) {
-                        Timber.d("User granted location permission, continuing");
+                .compose(rxPermissions.ensure(Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS))
+                .subscribe(granted -> {
+                    if (granted) {
+                        Timber.d("User granted permissions, continuing");
                         EventBus.getDefault().post(new ContinueClickEvent());
-                    } else if (permission.shouldShowRequestPermissionRationale) {
-                        Timber.d("User denied permission");
-                        // TODO: Tell user he is yet again, an idiot.
                     } else {
-                        Timber.d("User denied permission with never ask again");
+                        Timber.e("User denied permissions, is an idiot");
                     }
                 });
     }

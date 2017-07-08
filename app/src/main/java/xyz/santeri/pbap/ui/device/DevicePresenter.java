@@ -10,6 +10,9 @@ import net.grandcentrix.thirtyinch.rx.RxTiPresenterUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import timber.log.Timber;
@@ -25,6 +28,7 @@ public class DevicePresenter extends TiPresenter<DeviceView> {
     private final RxTiPresenterSubscriptionHandler rxHelper = new RxTiPresenterSubscriptionHandler(this);
     private final RxUtil rxUtil;
     private final BluetoothManager bluetoothManager;
+    private List<String> foundAddresses = new ArrayList<>();
 
     @Inject
     DevicePresenter(RxUtil rxUtil, BluetoothManager bluetoothManager) {
@@ -67,6 +71,8 @@ public class DevicePresenter extends TiPresenter<DeviceView> {
     void onBluetoothEnabled() {
         sendToView(DeviceView::showProgressBar);
 
+        foundAddresses.clear();
+
         rxHelper.manageViewSubscription(
                 bluetoothManager.getPairedDevices()
                         .compose(RxTiPresenterUtils.deliverToView(this))
@@ -81,6 +87,13 @@ public class DevicePresenter extends TiPresenter<DeviceView> {
                         .subscribe(device -> {
                             Timber.d("Found device, name '%s', device class '%s'",
                                     device.getName(), device.getBluetoothClass().getDeviceClass());
+
+                            if (foundAddresses.contains(device.getAddress())) {
+                                Timber.v("Ignore duplicate");
+                                return;
+                            }
+
+                            foundAddresses.add(device.getAddress());
 
                             if (device.getBluetoothClass().getMajorDeviceClass() == BluetoothClass.Device.Major.PHONE) {
                                 //noinspection ConstantConditions
