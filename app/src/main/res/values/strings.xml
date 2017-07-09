@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Ultimate Contacts Copier</string>
     <string name="bt_continue">Continue</string>
-    <string name="tv_start_title">Let\'s get started!</string>
-    <string name="tv_start_body">With UCC, your precious contacts can be transferred to your new device in a matter of minutes.\n\nWhy don\'t we get started? Simply tap the continue-button below.\n\nNOTE: Make sure your old device has power and that it has Bluetooth turned on and it is discoverable. Accept any prompts on both devices.</string>
+    <string name="tv_start_title">Let\'s get started</string>
+    <string name="tv_start_body">Tap the continue-button below to begin.</string>
     <string name="bt_quit">Quit</string>
     <string name="tb_device">Choose a device</string>
     <string name="tb_transfer">Transfer</string>
@@ -27,4 +27,16 @@
     <string name="tv_contact_phone_empty">No phone number</string>
     <string name="bt_scan">Scan</string>
     <string name="bt_finish">Save</string>
+    <string name="tv_faq_how">How does UCC work?</string>
+    <string name="tv_faq_how_body">UCC transfers contacts from your other device via Bluetooth. This feature is supported by thousands of devices across all manufacturers.</string>
+    <string name="tv_faq_permissions">Permissions required</string>
+    <string name="tv_faq_permissions_body">
+        <![CDATA[
+        UCC needs access to these permissions:
+        <br><br>&#8226; <b>Bluetooth</b><br>&#9;to transfer contacts
+        <br><br>&#8226; <b>Location</b><br>&#9;needed for Bluetooth discovery for devices running Android 6.0 or newer
+        <br><br>&#8226; <b>Contacts</b><br>&#9;to save contacts to the device
+        <br><br>You\'ll be requested to grant these permissions in the next step.
+        ]]>
+    </string>
 </resources>

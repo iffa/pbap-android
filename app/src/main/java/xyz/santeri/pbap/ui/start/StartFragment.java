@@ -3,10 +3,12 @@ package xyz.santeri.pbap.ui.start;
 import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -29,6 +31,9 @@ public class StartFragment extends BaseFragment {
     @BindView(R.id.bt_continue)
     Button continueButton;
 
+    @BindView(R.id.tv_faq_permissions_body)
+    TextView permissionsText;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,6 +43,8 @@ public class StartFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        permissionsText.setText(Html.fromHtml(getString(R.string.tv_faq_permissions_body)));
 
         RxPermissions rxPermissions = new RxPermissions(getActivity());
         RxView.clicks(continueButton)

@@ -157,13 +157,12 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @Override
     public void showTransferStarted(int contactsSize) {
-        TransitionManager.beginDelayedTransition(contactsContainer);
         connectionText.setText(getString(R.string.tv_transfer_started, contactsSize));
     }
 
     @OnClick(R.id.bt_finish)
     public void onFinishClicked() {
-
+        EventBus.getDefault().post(new TransferCompletedEvent());
     }
 
     @Override

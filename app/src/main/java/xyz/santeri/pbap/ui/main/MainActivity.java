@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +18,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
-import timber.log.Timber;
 import xyz.santeri.pbap.R;
 import xyz.santeri.pbap.ui.base.BaseActivity;
 import xyz.santeri.pbap.ui.device.DeviceFragment;
@@ -25,6 +25,7 @@ import xyz.santeri.pbap.ui.device.DeviceFragmentActiveEvent;
 import xyz.santeri.pbap.ui.finish.FinishFragment;
 import xyz.santeri.pbap.ui.start.ContinueClickEvent;
 import xyz.santeri.pbap.ui.start.StartFragment;
+import xyz.santeri.pbap.ui.transfer.TransferCompletedEvent;
 import xyz.santeri.pbap.ui.transfer.TransferFragment;
 import xyz.santeri.pbap.ui.transfer.TransferFragmentActiveEvent;
 import xyz.santeri.pbap.ui.view.NonSwipeableViewPager;
@@ -75,38 +76,19 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Subscribe
     public void onContinueClick(ContinueClickEvent event) {
-        Timber.v("Continue clicked", viewPager.getCurrentItem());
-
         viewPager.setCurrentItem(1, true);
 
         EventBus.getDefault().post(new DeviceFragmentActiveEvent());
-
-        /*
-        switch (viewPager.getCurrentItem()) {
-            case 0:
-                break;
-            case 1:
-                //noinspection ConstantConditions
-                getSupportActionBar().setTitle(R.string.tb_transfer);
-                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
-                break;
-            case 2:
-                //noinspection ConstantConditions
-                getSupportActionBar().setTitle(R.string.tb_done);
-                continueButton.setText(R.string.bt_quit);
-                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
-                break;
-            case 3:
-                Timber.v("User called quits, finishing");
-                finishAffinity();
-                break;
-        }
-        */
     }
 
     @Subscribe
     public void onChooseDevice(TransferFragmentActiveEvent event) {
         viewPager.setCurrentItem(2, true);
+    }
+
+    @Subscribe
+    public void onTransferCompleted(TransferCompletedEvent event) {
+        viewPager.setCurrentItem(3, true);
     }
 
     @Override

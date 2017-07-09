@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     style="@style/CardView.DayNight"
     android:layout_width="match_parent"
@@ -11,7 +12,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -31,15 +32,62 @@
             android:layout_marginTop="@dimen/content_padding_mini"
             android:text="@string/tv_start_body"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/bt_continue"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/content_padding"
-        android:text="@string/bt_continue" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/content_padding"
+            android:layout_marginStart="@dimen/content_padding"
+            android:layout_marginTop="@dimen/content_padding_big"
+            android:text="@string/tv_faq_how"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/content_padding"
+            android:layout_marginStart="@dimen/content_padding"
+            android:layout_marginTop="@dimen/content_padding_mini"
+            android:text="@string/tv_faq_how_body"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/content_padding"
+            android:layout_marginStart="@dimen/content_padding"
+            android:layout_marginTop="@dimen/content_padding_big"
+            android:text="@string/tv_faq_permissions"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline2" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_faq_permissions_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/bt_continue"
+                android:layout_marginEnd="@dimen/content_padding"
+                android:layout_marginStart="@dimen/content_padding"
+                android:layout_marginTop="@dimen/content_padding_mini"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="@string/tv_faq_permissions_body" />
+
+            <Button
+                android:id="@+id/bt_continue"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="@dimen/content_padding"
+                android:layout_marginEnd="@dimen/content_padding"
+                android:layout_marginTop="@dimen/content_padding_small"
+                android:text="@string/bt_continue" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -27,4 +27,8 @@
     <style name="CardView.DayNight" parent="CardView.Base">
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
     </style>
+
+    <style name="TextAppearance.AppCompat.Headline2" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>
