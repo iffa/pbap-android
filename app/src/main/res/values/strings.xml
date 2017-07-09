@@ -23,7 +23,8 @@
     <string name="tv_transfer_progress">Transferred %1$d of %2$d</string>
     <string name="tv_transfer_finished">Transfer finished</string>
     <string name="tv_transfer_error">Transfer failed</string>
-    <string name="tv_contacts_empty">Transferred contacts will be shown here.</string>
+    <string name="tv_contacts_empty">Hang tight - transferred contacts will appear here after the transfer is completed.</string>
     <string name="tv_contact_phone_empty">No phone number</string>
     <string name="bt_scan">Scan</string>
+    <string name="bt_finish">Save</string>
 </resources>

@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.Observable;
 import xyz.santeri.pbap.R;
 import xyz.santeri.pbap.ui.base.BaseFragment;
@@ -41,6 +43,9 @@ public class TransferFragment extends BaseFragment implements TransferView {
     @BindView(R.id.container)
     ViewGroup container;
 
+    @BindView(R.id.contacts_container)
+    ViewGroup contactsContainer;
+
     @BindView(R.id.tv_transfer_status)
     TextView connectionText;
 
@@ -52,6 +57,12 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @BindView(R.id.tv_contacts_empty)
     TextView emptyTextView;
+
+    @BindView(R.id.divider)
+    View divider;
+
+    @BindView(R.id.bt_finish)
+    Button finishButton;
 
     @BindView(R.id.rv_contacts)
     SwagRecyclerView recyclerView;
@@ -118,21 +129,23 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @Override
     public void showConnectionFailed() {
-        TransitionManager.beginDelayedTransition(container);
+        TransitionManager.beginDelayedTransition(contactsContainer);
         connectionText.setText(R.string.tv_connection_error);
         progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showTransferFinished() {
-        TransitionManager.beginDelayedTransition(container);
+        TransitionManager.beginDelayedTransition(contactsContainer);
         connectionText.setText(R.string.tv_transfer_finished);
         progressBar.setVisibility(View.GONE);
+        finishButton.setVisibility(View.VISIBLE);
+        divider.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showTransferFailed() {
-        TransitionManager.beginDelayedTransition(container);
+        TransitionManager.beginDelayedTransition(contactsContainer);
         connectionText.setText(R.string.tv_transfer_error);
         progressBar.setVisibility(View.GONE);
     }
@@ -144,8 +157,13 @@ public class TransferFragment extends BaseFragment implements TransferView {
 
     @Override
     public void showTransferStarted(int contactsSize) {
-        TransitionManager.beginDelayedTransition(container);
+        TransitionManager.beginDelayedTransition(contactsContainer);
         connectionText.setText(getString(R.string.tv_transfer_started, contactsSize));
+    }
+
+    @OnClick(R.id.bt_finish)
+    public void onFinishClicked() {
+
     }
 
     @Override
