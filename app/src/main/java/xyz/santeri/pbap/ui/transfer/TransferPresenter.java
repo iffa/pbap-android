@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import timber.log.Timber;
 import xyz.santeri.pbap.bluetooth.BluetoothManager;
 import xyz.santeri.pbap.util.RxUtil;
@@ -29,6 +30,7 @@ public class TransferPresenter extends TiPresenter<TransferView> {
     private final PbapEventHandler eventHandler = new PbapEventHandler();
     private final RxUtil rxUtil;
     private final BluetoothManager bluetoothManager;
+    private boolean ignoreNoPhoneNumber = true;
 
     @Inject
     TransferPresenter(RxUtil rxUtil, BluetoothManager bluetoothManager) {
@@ -65,13 +67,9 @@ public class TransferPresenter extends TiPresenter<TransferView> {
             case BluetoothPbapClient.EVENT_PULL_PHONE_BOOK_DONE:
                 Timber.i("EVENT_PULL_PHONE_BOOK_DONE");
 
-                bluetoothManager.stopPbapConnection();
-                sendToView(view -> {
-                    view.showTransferFinished();
-
-                    //noinspection unchecked
-                    view.onContactsTransferred((List<VCardEntry>) msg.obj);
-                });
+                // If this does not return a list of vCard entries, I'm not sure what to say anymore
+                //noinspection unchecked
+                onContactsTransferred((List<VCardEntry>) msg.obj);
                 break;
             case BluetoothPbapClient.EVENT_PULL_PHONE_BOOK_ERROR:
                 Timber.e("EVENT_PULL_PHONE_BOOK_ERROR");
@@ -101,6 +99,27 @@ public class TransferPresenter extends TiPresenter<TransferView> {
                 Timber.w("Unexpected event '%s'", msg.what);
                 break;
         }
+    }
+
+    private void onContactsTransferred(List<VCardEntry> contacts) {
+        bluetoothManager.stopPbapConnection();
+
+        Observable.defer(() -> {
+            if (ignoreNoPhoneNumber) {
+                Timber.d("Filtering out entries with no phone number");
+                return Observable.from(contacts)
+                        .filter(item
+                                -> (item.getPhoneList() != null && !item.getPhoneList().isEmpty()))
+                        .toList();
+            } else {
+                Timber.d("Not filtering entries");
+                return Observable.just(contacts);
+            }
+        }).compose(rxUtil.observableSchedulers()).subscribe(sorted ->
+                sendToView(view -> {
+                    view.showTransferFinished();
+                    view.onContactsTransferred(sorted);
+                }), Timber::e);
     }
 
     static class PbapEventHandler extends Handler {
