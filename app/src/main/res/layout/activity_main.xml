@@ -24,11 +24,11 @@
             android:layout_marginBottom="@dimen/content_padding_small"
             android:layout_marginEnd="@dimen/content_padding"
             android:layout_marginStart="@dimen/content_padding"
-            app:stpi_circleColor="#CCFFFFFF"
+            app:stpi_circleColor="#FFFFFF"
             app:stpi_circleStrokeWidth="2dp"
             app:stpi_indicatorColor="@color/colorAccent"
-            app:stpi_lineColor="#CCFFFFFF"
-            app:stpi_lineDoneColor="@color/colorAccent" />
+            app:stpi_lineColor="#FFFFFF"
+            app:stpi_lineDoneColor="@android:color/white" />
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
