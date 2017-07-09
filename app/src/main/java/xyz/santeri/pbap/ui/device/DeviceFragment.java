@@ -5,13 +5,13 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,6 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.Observable;
 import rx_activity_result.RxActivityResult;
 import timber.log.Timber;
@@ -48,6 +49,9 @@ public class DeviceFragment extends BaseFragment implements DeviceView {
 
     @BindView(R.id.pb_found)
     ProgressBar foundProgressBar;
+
+    @BindView(R.id.bt_scan)
+    Button scanButton;
 
     @BindView(R.id.tv_found_empty)
     TextView foundEmpty;
@@ -139,14 +143,17 @@ public class DeviceFragment extends BaseFragment implements DeviceView {
     public void onDiscoveryFinished() {
         TransitionManager.beginDelayedTransition(container);
         foundProgressBar.setVisibility(View.GONE);
-        Snackbar discoverySnack = Snackbar.make(foundRecyclerView, R.string.sb_discovery_finished, Snackbar.LENGTH_INDEFINITE);
-        discoverySnack.setAction(R.string.action_retry, v -> {
-            // TODO: Fix buggy behavior of retry
-            foundAdapter.clear();
-            presenterPlugin.getPresenter().onBluetoothEnabled();
-            discoverySnack.dismiss();
-        });
-        discoverySnack.show();
+        scanButton.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.bt_scan)
+    public void onScanClicked() {
+        TransitionManager.beginDelayedTransition(container);
+        foundProgressBar.setVisibility(View.VISIBLE);
+        scanButton.setVisibility(View.GONE);
+
+        foundAdapter.clear();
+        presenterPlugin.getPresenter().onBluetoothEnabled();
     }
 
     @Subscribe

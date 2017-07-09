@@ -25,4 +25,5 @@
     <string name="tv_transfer_error">Transfer failed</string>
     <string name="tv_contacts_empty">Transferred contacts will be shown here.</string>
     <string name="tv_contact_phone_empty">No phone number</string>
+    <string name="bt_scan">Scan</string>
 </resources>
