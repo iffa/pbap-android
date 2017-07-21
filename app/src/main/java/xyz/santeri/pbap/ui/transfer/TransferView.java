@@ -31,5 +31,7 @@ interface TransferView extends TiView {
     @CallOnMainThread
     void showTransferStarted(int contactsSize);
 
+    Observable<Void> onSaveClick();
+
     Observable<VCardEntry> onContactClick();
 }

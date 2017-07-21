@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.client.pbap.BluetoothPbapClient;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 
 import com.android.vcard.VCardEntry;
 
@@ -13,6 +14,7 @@ import net.grandcentrix.thirtyinch.rx.RxTiPresenterSubscriptionHandler;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 import rx.Observable;
 import timber.log.Timber;
 import xyz.santeri.pbap.bluetooth.BluetoothManager;
+import xyz.santeri.pbap.data.ContactsManager;
 import xyz.santeri.pbap.util.RxUtil;
 
 /**
@@ -30,12 +33,15 @@ public class TransferPresenter extends TiPresenter<TransferView> {
     private final PbapEventHandler eventHandler = new PbapEventHandler();
     private final RxUtil rxUtil;
     private final BluetoothManager bluetoothManager;
+    private final ContactsManager contactsManager;
     private boolean ignoreNoPhoneNumber = true;
+    private List<VCardEntry> contacts = new ArrayList<>();
 
     @Inject
-    TransferPresenter(RxUtil rxUtil, BluetoothManager bluetoothManager) {
+    TransferPresenter(RxUtil rxUtil, BluetoothManager bluetoothManager, ContactsManager contactsManager) {
         this.rxUtil = rxUtil;
         this.bluetoothManager = bluetoothManager;
+        this.contactsManager = contactsManager;
     }
 
     @Override
@@ -52,6 +58,22 @@ public class TransferPresenter extends TiPresenter<TransferView> {
         EventBus.getDefault().unregister(this);
 
         bluetoothManager.stopPbapConnection();
+    }
+
+    @Override
+    protected void onAttachView(@NonNull TransferView view) {
+        super.onAttachView(view);
+
+        rxHelper.manageViewSubscription(view.onSaveClick()
+                .flatMap(aVoid -> {
+                    EventBus.getDefault().post(new TransferCompletedEvent());
+
+                    Timber.d("Saving contacts!");
+
+                    return contactsManager.saveContacts(contacts);
+                })
+                .subscribe(aBoolean -> Timber.d("Contacts saved? I guess"),
+                        throwable -> Timber.e(throwable, "Failed to save contacts")));
     }
 
     void onActiveEvent(BluetoothDevice device) {
@@ -117,6 +139,7 @@ public class TransferPresenter extends TiPresenter<TransferView> {
             }
         }).compose(rxUtil.observableSchedulers()).subscribe(sorted ->
                 sendToView(view -> {
+                    TransferPresenter.this.contacts = sorted;
                     view.showTransferFinished();
                     view.onContactsTransferred(sorted);
                 }), Timber::e);

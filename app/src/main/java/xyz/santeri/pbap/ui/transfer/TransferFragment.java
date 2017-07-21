@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.vcard.VCardEntry;
+import com.jakewharton.rxbinding.view.RxView;
 import com.lucasurbas.listitemview.ListItemView;
 import com.mikepenz.itemanimators.AlphaInAnimator;
 
@@ -25,7 +26,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import rx.Observable;
 import xyz.santeri.pbap.R;
 import xyz.santeri.pbap.ui.base.BaseFragment;
@@ -160,9 +160,9 @@ public class TransferFragment extends BaseFragment implements TransferView {
         connectionText.setText(getString(R.string.tv_transfer_started, contactsSize));
     }
 
-    @OnClick(R.id.bt_finish)
-    public void onFinishClicked() {
-        EventBus.getDefault().post(new TransferCompletedEvent());
+    @Override
+    public Observable<Void> onSaveClick() {
+        return RxView.clicks(finishButton);
     }
 
     @Override
