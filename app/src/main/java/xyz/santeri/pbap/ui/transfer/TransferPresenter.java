@@ -70,7 +70,7 @@ public class TransferPresenter extends TiPresenter<TransferView> {
 
                     Timber.d("Saving contacts!");
 
-                    return contactsManager.saveContacts(contacts);
+                    return contactsManager.saveContactsToDevice(contacts);
                 })
                 .subscribe(aBoolean -> Timber.d("Contacts saved? I guess"),
                         throwable -> Timber.e(throwable, "Failed to save contacts")));

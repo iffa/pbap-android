@@ -49,7 +49,8 @@ public class StartFragment extends BaseFragment {
         RxPermissions rxPermissions = new RxPermissions(getActivity());
         RxView.clicks(continueButton)
                 .compose(rxPermissions.ensure(Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS))
+                        Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS,
+                        Manifest.permission.GET_ACCOUNTS))
                 .subscribe(granted -> {
                     if (granted) {
                         Timber.d("User granted permissions, continuing");
