@@ -29,6 +29,8 @@ import static android.provider.ContactsContract.Data;
 import static android.provider.ContactsContract.RawContacts;
 
 /**
+ * TODO: Don't create duplicate contacts
+ *
  * @author Santeri Elo
  */
 @Singleton

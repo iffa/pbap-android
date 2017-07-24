@@ -11,14 +11,14 @@ versionberg {
 
 android {
     android {
-        compileSdkVersion 25
-        buildToolsVersion "25.0.2"
+        compileSdkVersion 26
+        buildToolsVersion "26.0.0"
 
         defaultConfig {
             applicationId "xyz.santeri.pbap"
 
             minSdkVersion 21
-            targetSdkVersion 25
+            targetSdkVersion 26
 
             versionCode versionberg.code
             versionName versionberg.name
@@ -55,14 +55,12 @@ android {
 
 dependencies {
     dependencies {
-        def supportVersion = '25.4.0'
-        def daggerVersion = '2.9'
-        def thirtyinchVersion = '0.8.0-rc3'
-        def butterknifeVersion = '8.5.1'
-        def rxBindingVersion = '1.0.0'
-        def leakcanaryVersion = '1.5'
-        def rxbindingVersion = '1.0.0'
-        def autovalueVersion = '1.4'
+        def supportVersion = '26.0.0'
+        def daggerVersion = '2.11'
+        def thirtyinchVersion = '0.8.0'
+        def butterknifeVersion = '8.7.0'
+        def rxBindingVersion = '1.0.1'
+        def leakcanaryVersion = '1.5.1'
 
         compile "com.android.support:appcompat-v7:$supportVersion"
         compile "com.android.support:recyclerview-v7:$supportVersion"
@@ -88,29 +86,21 @@ dependencies {
         compile "com.jakewharton.rxbinding:rxbinding:$rxBindingVersion"
         compile "com.jakewharton.rxbinding:rxbinding-design:$rxBindingVersion"
 
-        compile "com.jakewharton.rxbinding:rxbinding:$rxbindingVersion"
-        compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$rxbindingVersion"
-        compile "com.jakewharton.rxbinding:rxbinding-design:$rxbindingVersion"
+        compile 'com.pascalwelsch.compositeandroid:activity:25.4.0'
+        compile 'com.pascalwelsch.compositeandroid:fragment:25.4.0'
 
-        compile "com.google.auto.value:auto-value:$autovalueVersion"
-        annotationProcessor "com.google.auto.value:auto-value:$autovalueVersion"
-        annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
-
-        compile 'com.pascalwelsch.compositeandroid:activity:25.3.0'
-        compile 'com.pascalwelsch.compositeandroid:fragment:25.3.0'
-
-        compile 'io.reactivex:rxjava:1.2.9'
+        compile 'io.reactivex:rxjava:1.3.0'
         compile 'io.reactivex:rxandroid:1.2.1'
 
-        compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+        compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
 
         compile 'com.github.VictorAlbertos:RxActivityResult:0.4.1-1.x'
 
         compile "com.mikepenz:itemanimators:0.5.0@aar"
 
-        compile 'com.lucasurbas:listitemview:1.0.2' // TODO: 1.0.3 fixes vector drawables, not yet pushed to mvn
+        compile 'com.lucasurbas:listitemview:1.0.5'
 
-        compile 'com.github.badoualy:stepper-indicator:1.0.6'
+        compile 'com.github.badoualy:stepper-indicator:1.0.7'
 
         compile 'com.jakewharton.timber:timber:4.5.1'
 
