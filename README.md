@@ -1,6 +1,6 @@
-# pbap-android (proof-of-concept)
+# pbap-android
 
-Feel free to submit issues, pull requests or just learn from the code.
+Android app for transfering contacts from one phone to another via Bluetooth.
 
 ### License
 
