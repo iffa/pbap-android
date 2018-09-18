@@ -2,6 +2,10 @@
 
 Android app for transfering contacts from one phone to another via Bluetooth.
 
+**Disclaimer: this app may not work in its current state, or may have critical bugs.**
+
+Sometime in the future I will rebuild this application, but in the meantime you are probably better off using an app released on the Play store.
+
 ### License
 
     Copyright 2017 Santeri Elo
